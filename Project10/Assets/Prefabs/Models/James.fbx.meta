@@ -8,42 +8,42 @@ ModelImporter:
       type: UnityEngine:Texture2D
       assembly: UnityEngine.CoreModule
       name: Ch06_1001_Diffuse
-    second: {fileID: 2800000, guid: 85cb56c8e82104f5ba2dfe8abefa0088, type: 3}
+    second: {fileID: 2800000, guid: 68955ea6d259e440ba6077af30ccf66c, type: 3}
   - first:
       type: UnityEngine:Texture2D
       assembly: UnityEngine.CoreModule
       name: Ch06_1001_Glossiness
-    second: {fileID: 2800000, guid: d8c4df9cb1b9c4bdbac535cfbc4fb720, type: 3}
+    second: {fileID: 2800000, guid: 264513bcc38a6401eaa7e320856a8e6a, type: 3}
   - first:
       type: UnityEngine:Texture2D
       assembly: UnityEngine.CoreModule
       name: Ch06_1001_Normal
-    second: {fileID: 2800000, guid: b48b28976d2564092abe151ec5e90086, type: 3}
+    second: {fileID: 2800000, guid: 687c760cf157e49a4b8e3643ef785036, type: 3}
   - first:
       type: UnityEngine:Texture2D
       assembly: UnityEngine.CoreModule
       name: Ch06_1001_Specular
-    second: {fileID: 2800000, guid: b4f386a44f97e411fa60bbbad8429017, type: 3}
+    second: {fileID: 2800000, guid: aef0c27edbc354853b715109a4013758, type: 3}
   - first:
       type: UnityEngine:Texture2D
       assembly: UnityEngine.CoreModule
       name: Ch06_1002_Diffuse
-    second: {fileID: 2800000, guid: 398402ce740d74be8a9258e01731aab7, type: 3}
+    second: {fileID: 2800000, guid: db50056912b7b47c3b431ec9b8e3fd9a, type: 3}
   - first:
       type: UnityEngine:Texture2D
       assembly: UnityEngine.CoreModule
       name: Ch06_1002_Glossiness
-    second: {fileID: 2800000, guid: 1b65a060bd1cb463ba66e7a794a2c7fd, type: 3}
+    second: {fileID: 2800000, guid: 5861b69f013c841fca583789112abfd3, type: 3}
   - first:
       type: UnityEngine:Texture2D
       assembly: UnityEngine.CoreModule
       name: Ch06_1002_Normal
-    second: {fileID: 2800000, guid: 81d3ed34126d949779ff689a14496f9a, type: 3}
+    second: {fileID: 2800000, guid: 41e6b0c57897449dd8e0ee460bbfc947, type: 3}
   - first:
       type: UnityEngine:Texture2D
       assembly: UnityEngine.CoreModule
       name: Ch06_1002_Specular
-    second: {fileID: 2800000, guid: 51b0ee7700fb34d709e618259148c609, type: 3}
+    second: {fileID: 2800000, guid: f0e5eb75cb9614713af4b4cd021e7187, type: 3}
   materials:
     materialImportMode: 2
     materialName: 0
@@ -64,7 +64,7 @@ ModelImporter:
     animationDoRetargetingWarnings: 0
     importAnimatedCustomProperties: 0
     importConstraints: 0
-    animationCompression: 1
+    animationCompression: 3
     animationRotationError: 0.5
     animationPositionError: 0.5
     animationScaleError: 0.5
@@ -133,13 +133,13 @@ ModelImporter:
     globalScale: 1
     rootMotionBoneName: 
     hasTranslationDoF: 0
-    hasExtraRoot: 0
+    hasExtraRoot: 1
     skeletonHasParents: 1
   lastHumanDescriptionAvatarSource: {instanceID: 0}
   autoGenerateAvatarMappingIfUnspecified: 1
-  animationType: 2
+  animationType: 3
   humanoidOversampling: 1
-  avatarSetup: 0
+  avatarSetup: 1
   addHumanoidExtraRootOnlyWhenUsingAvatar: 1
   importBlendShapeDeformPercent: 1
   remapMaterialsIfMaterialImportModeIsNone: 0

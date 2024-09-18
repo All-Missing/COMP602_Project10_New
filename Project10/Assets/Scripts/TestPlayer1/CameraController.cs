@@ -10,7 +10,7 @@ public class CameraController : MonoBehaviour
     [SerializeField] float rotationSpeed = 2f;
     [SerializeField] float distance = 5;
 
-    [SerializeField] float minVerticalAngle = -20;
+    [SerializeField] float minVerticalAngle = -10;
     [SerializeField] float maxVerticalAngle = 45;
 
     [SerializeField] Vector2 framingOffSet;
@@ -35,10 +35,10 @@ public class CameraController : MonoBehaviour
         invertXValue = (invertX) ? -1 : 1;
         invertYValue = (invertY) ? -1 : 1;
 
-        rotationX += Input.GetAxis("Mouse Y") * invertYValue * rotationSpeed;
+        rotationX += Input.GetAxis("Camera Y") * invertYValue * rotationSpeed;
         rotationX = Math.Clamp(rotationX, minVerticalAngle, maxVerticalAngle);
 
-        rotationY += Input.GetAxis("Mouse X") * invertXValue * rotationSpeed;
+        rotationY += Input.GetAxis("Camera X") * invertXValue * rotationSpeed;
         
 
         var targetRotation = Quaternion.Euler(rotationX, rotationY, 0);
