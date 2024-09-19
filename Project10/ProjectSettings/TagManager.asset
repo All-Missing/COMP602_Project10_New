@@ -5,6 +5,12 @@ TagManager:
   serializedVersion: 2
   tags:
   - CinemachineTarget
+<<<<<<< HEAD
+=======
+  - Climb_cliff
+  - climb_cliff2
+  - pillar
+>>>>>>> Faiz
   layers:
   - Default
   - TransparentFX
@@ -12,9 +18,18 @@ TagManager:
   - 
   - Water
   - UI
+<<<<<<< HEAD
   - Obstacles
   - 
+=======
+  - Ground
+  - whatIsGround
+<<<<<<< HEAD
+>>>>>>> main
   - 
+=======
+  - Interactable
+>>>>>>> Faiz
   - 
   - 
   - 
