@@ -20,6 +20,7 @@ public class PlayerController : MonoBehaviour
     Animator animator;
 
     bool isGrounded;
+    bool hasControl = true;
 
     float ySpeed;
 
@@ -42,6 +43,8 @@ public class PlayerController : MonoBehaviour
 
         var moveDir = cameraController.PlanarRotation * moveInput;
 
+        if (!hasControl)
+            return;        
 
         GroundCheck();
         if (isGrounded)
@@ -75,9 +78,23 @@ public class PlayerController : MonoBehaviour
         isGrounded = Physics.CheckSphere(transform.TransformPoint(groundCheckOffSet), groundCheckRadius, groundLayer);
     }
 
+    public void SetControl(bool hasControl)
+    {
+        this.hasControl = hasControl;
+        characterController.enabled = hasControl;
+
+        if (!hasControl)
+        {
+            animator.SetFloat("moveAmount", 0f);
+            targetRotation = transform.rotation;
+        }
+    }
+
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = new Color(0, 1, 0, 0.5f);
         Gizmos.DrawSphere(transform.TransformPoint(groundCheckOffSet), groundCheckRadius);
     }
+
+    public float RotationSpeed => rotationSpeed; 
 }
