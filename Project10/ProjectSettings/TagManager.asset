@@ -5,9 +5,9 @@ TagManager:
   serializedVersion: 2
   tags:
   - CinemachineTarget
-  - Climb_cliff
-  - climb_cliff2
+  - Fence
   - pillar
+  - Terrain
   layers:
   - Default
   - TransparentFX
@@ -15,9 +15,9 @@ TagManager:
   - 
   - Water
   - UI
-  - Ground
-  - whatIsGround
-  - Interactable
+  - Obstacles
+  - 
+  - 
   - 
   - 
   - 
