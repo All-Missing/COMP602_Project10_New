@@ -9,6 +9,7 @@ public class ParkourAction : ScriptableObject
     [SerializeField] string animName;
     [SerializeField] string obstacleTag;
 
+    //Assign min max height variables to perform different Parkour actions
     [SerializeField] float minHeight;
     [SerializeField] float maxHeight;
 
