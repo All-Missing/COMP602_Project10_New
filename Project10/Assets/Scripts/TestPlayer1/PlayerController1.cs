@@ -1,38 +1,36 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Net.WebSockets;
 using UnityEngine;
 
-public class PlayerController : MonoBehaviour
+public class PlayerController1 : MonoBehaviour
 {
     [SerializeField] float moveSpeed = 5f;
     [SerializeField] float rotationSpeed = 500f;
 
-    [Header ("Ground Check Settings")]
-
+    [Header("Ground Check Setting")]
     [SerializeField] float groundCheckRadius = 0.2f;
     [SerializeField] Vector3 groundCheckOffSet;
     [SerializeField] LayerMask groundLayer;
-
-    CharacterController characterController;
-    Quaternion targetRotation;
-
-    CameraController cameraController;
-    Animator animator;
 
     bool isGrounded;
     bool hasControl = true;
 
     float ySpeed;
+    Quaternion targetRotation;
+
+    CameraController cameraController;
+    Animator animator;
+    CharacterController characterController;
 
     private void Awake()
     {
         cameraController = Camera.main.GetComponent<CameraController>();
-        animator = GetComponent<Animator>();        
+        animator = GetComponent<Animator>();
         characterController = GetComponent<CharacterController>();
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Update()
     {
         float h = Input.GetAxis("Horizontal");
         float v = Input.GetAxis("Vertical");
@@ -44,16 +42,17 @@ public class PlayerController : MonoBehaviour
         var moveDir = cameraController.PlanarRotation * moveInput;
 
         if (!hasControl)
-            return;        
+            return;
 
         GroundCheck();
+        // Debug.Log("isGrounded = " + isGrounded);
         if (isGrounded)
         {
             ySpeed = -0.5f;
         }
         else
         {
-            ySpeed += Physics.gravity.y * Time.deltaTime;
+            ySpeed+= Physics.gravity.y * Time.deltaTime;
         }
 
         var velocity = moveDir * moveSpeed;
@@ -62,16 +61,18 @@ public class PlayerController : MonoBehaviour
         characterController.Move(velocity * Time.deltaTime);
 
         if (moveAmount > 0)
-        {            
+        {                
+            // transform.rotation = Quaternion.LookRotation(moveDir);
             targetRotation = Quaternion.LookRotation(moveDir);
         }
 
-        transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
+        transform.rotation = Quaternion.RotateTowards(transform.rotation,
+            targetRotation, rotationSpeed * Time.deltaTime);
 
-        animator.SetFloat("moveAmount", moveAmount, 0.2f, Time.deltaTime);
+        animator.SetFloat("moveAmount", moveAmount, 0.2f, Time.deltaTime);            
     }
 
-    //Handle gravity
+    //This method to handle character ground check.
     void GroundCheck()
     {
         isGrounded = Physics.CheckSphere(transform.TransformPoint(groundCheckOffSet), groundCheckRadius, groundLayer);
@@ -84,7 +85,7 @@ public class PlayerController : MonoBehaviour
 
         if (!hasControl)
         {
-            animator.SetFloat("moveAmount", 0f);
+            animator.SetFloat("moveAround", 0f);
             targetRotation = transform.rotation;
         }
     }
@@ -92,8 +93,8 @@ public class PlayerController : MonoBehaviour
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = new Color(0, 1, 0, 0.5f);
-        Gizmos.DrawSphere(transform.TransformPoint(groundCheckOffSet), groundCheckRadius);
+        Gizmos.DrawSphere(transform.TransformPoint(groundCheckOffSet), groundCheckRadius);    
     }
 
-    public float RotationSpeed => rotationSpeed; 
+    public float RotationSpeed => rotationSpeed;
 }
