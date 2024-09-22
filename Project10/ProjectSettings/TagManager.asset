@@ -6,6 +6,8 @@ TagManager:
   tags:
   - CinemachineTarget
   - Fence
+  - pillar
+  - Terrain
   layers:
   - Default
   - TransparentFX
