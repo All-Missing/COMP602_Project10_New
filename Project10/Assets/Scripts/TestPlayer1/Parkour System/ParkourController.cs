@@ -9,13 +9,13 @@ public class ParkourController : MonoBehaviour
 
     EnvironmentScanner environmentScanner;
     Animator animator;
-    PlayerController playerController;
+    PlayerController1 playerController;
 
     private void Awake()
     {
         environmentScanner = GetComponent<EnvironmentScanner>();
         animator = GetComponent<Animator>();
-        playerController = GetComponent<PlayerController>();
+        playerController = GetComponent<PlayerController1>();
     }
 
     private void Update()
@@ -26,7 +26,7 @@ public class ParkourController : MonoBehaviour
             if (hitData.forwardHitFound)
             {
                 //For debugging obstacle objects found
-                // Debug.Log("Obstacle Found " + hitData.forwardHit.transform.name);
+                Debug.Log("Obstacle Found " + hitData.forwardHit.transform.name);
                 foreach (var action in parkourActions)
                 {
                     if (action.CheckIfPossible(hitData, transform))

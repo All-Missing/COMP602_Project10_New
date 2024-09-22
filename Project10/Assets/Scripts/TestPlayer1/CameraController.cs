@@ -36,14 +36,13 @@ public class CameraController : MonoBehaviour
         invertYValue = (invertY) ? -1 : 1;
 
         rotationX += Input.GetAxis("Camera Y") * invertYValue * rotationSpeed;
-        rotationX = Math.Clamp(rotationX, minVerticalAngle, maxVerticalAngle);
+        rotationX = Mathf.Clamp(rotationX, minVerticalAngle, maxVerticalAngle);
 
         rotationY += Input.GetAxis("Camera X") * invertXValue * rotationSpeed;
         
 
         var targetRotation = Quaternion.Euler(rotationX, rotationY, 0);
         var focusPosition = followTarget.position + new Vector3(framingOffSet.x, framingOffSet.y);
-
 
         transform.position = focusPosition -  targetRotation * new Vector3(0, 0, distance);
         transform.rotation = targetRotation;            
