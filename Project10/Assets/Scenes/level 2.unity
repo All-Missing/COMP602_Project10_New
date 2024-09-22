@@ -1638,36 +1638,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 3479721309218053455, guid: e25dac0a381614aaeb6d1210d3148ec3, type: 3}
-      propertyPath: m_Height
-      value: 1.7
-      objectReference: {fileID: 0}
-    - target: {fileID: 3479721309218053455, guid: e25dac0a381614aaeb6d1210d3148ec3, type: 3}
-      propertyPath: m_Center.y
-      value: 0.87
-      objectReference: {fileID: 0}
-    - target: {fileID: 3479721309218053455, guid: e25dac0a381614aaeb6d1210d3148ec3, type: 3}
-      propertyPath: m_SkinWidth
-      value: 0.02
-      objectReference: {fileID: 0}
     - target: {fileID: 7541667670889608303, guid: e25dac0a381614aaeb6d1210d3148ec3, type: 3}
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
-    - target: {fileID: 8580378991958455397, guid: e25dac0a381614aaeb6d1210d3148ec3, type: 3}
-      propertyPath: m_ApplyRootMotion
-      value: 1
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 7541667670889608303, guid: e25dac0a381614aaeb6d1210d3148ec3, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 997239443}
-    - targetCorrespondingSourceObject: {fileID: 7541667670889608303, guid: e25dac0a381614aaeb6d1210d3148ec3, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 997239442}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e25dac0a381614aaeb6d1210d3148ec3, type: 3}
 --- !u!4 &211731544 stripped
 Transform:
@@ -5856,45 +5834,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e4e5d2f7f155681449aca26cbdb2b635, type: 3}
---- !u!1 &997239438 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 7541667670889608303, guid: e25dac0a381614aaeb6d1210d3148ec3, type: 3}
-  m_PrefabInstance: {fileID: 211731543}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &997239442
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 997239438}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f9b7d1424b3e346c0b6e25c68bd49988, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  parkourActions:
-  - {fileID: 11400000, guid: b012ac5868c7c45949924f9909f32571, type: 2}
-  - {fileID: 11400000, guid: 35dc05583429d48a2a1f4c338a790c78, type: 2}
-  - {fileID: 11400000, guid: c5de03b44f5984ed9aa20e032fe15745, type: 2}
---- !u!114 &997239443
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 997239438}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5b18d821f9dfd484092714714d7fa3a8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  forwardRayOffSet: {x: 0, y: 0.25, z: 0}
-  forwardRayLength: 0.8
-  heightRayLength: 5
-  obstacleLayer:
-    serializedVersion: 2
-    m_Bits: 64
 --- !u!1001 &1000116587
 PrefabInstance:
   m_ObjectHideFlags: 0
