@@ -7353,8 +7353,8 @@ GameObject:
   - component: {fileID: 1166530220}
   - component: {fileID: 1166530219}
   m_Layer: 6
-  m_Name: Cube (7)
-  m_TagString: Untagged
+  m_Name: Fence
+  m_TagString: Fence
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -12244,6 +12244,22 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player1
       objectReference: {fileID: 0}
+    - target: {fileID: 1974692166379415084, guid: d36076b840efb4c4da943874b51d5e91, type: 3}
+      propertyPath: parkourActions.Array.size
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 1974692166379415084, guid: d36076b840efb4c4da943874b51d5e91, type: 3}
+      propertyPath: parkourActions.Array.data[1]
+      value: 
+      objectReference: {fileID: 11400000, guid: 3216d3a1a99e84964b605343f7fcc027, type: 2}
+    - target: {fileID: 1974692166379415084, guid: d36076b840efb4c4da943874b51d5e91, type: 3}
+      propertyPath: parkourActions.Array.data[2]
+      value: 
+      objectReference: {fileID: 11400000, guid: 35dc05583429d48a2a1f4c338a790c78, type: 2}
+    - target: {fileID: 1974692166379415084, guid: d36076b840efb4c4da943874b51d5e91, type: 3}
+      propertyPath: parkourActions.Array.data[3]
+      value: 
+      objectReference: {fileID: 11400000, guid: c5de03b44f5984ed9aa20e032fe15745, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

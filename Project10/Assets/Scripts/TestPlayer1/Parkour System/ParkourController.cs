@@ -45,6 +45,7 @@ public class ParkourController : MonoBehaviour
         inAction = true;
         playerController.SetControl(false);
 
+        animator.SetBool("mirrorAction", action.Mirror);
         animator.CrossFade(action.AnimName, 0.2f);
         yield return null;
 
@@ -63,6 +64,10 @@ public class ParkourController : MonoBehaviour
             
             if (action.EnableTargetMatching)
                 MatchTarget(action);
+            
+            //prevent player perform animation transition during in air state, gravity handles player position Y.
+            if (animator.IsInTransition(0) && timer > 0.5f)
+                break;
 
             yield return null;
         }

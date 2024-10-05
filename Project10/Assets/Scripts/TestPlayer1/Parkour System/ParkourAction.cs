@@ -4,11 +4,12 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "Parkour System/New parkour action")]
+
 public class ParkourAction : ScriptableObject
 {
     [SerializeField] string animName;
     [SerializeField] string obstacleTag;
-
+     
     //Assign min max height variables to perform different Parkour actions
     [SerializeField] float minHeight;
     [SerializeField] float maxHeight;
@@ -18,7 +19,7 @@ public class ParkourAction : ScriptableObject
 
     [Header("Target Matching")]
     [SerializeField] bool enableTargetMatching = true;
-    [SerializeField] AvatarTarget matchBodyPart;
+    [SerializeField] protected AvatarTarget matchBodyPart;
     [SerializeField] float matchStartTime;
     [SerializeField] float matchTargetTime;
     [SerializeField] Vector3 matchPosWeight = new Vector3 (0, 1, 0);
@@ -27,16 +28,19 @@ public class ParkourAction : ScriptableObject
 
     public Vector3 MatchPos { get; set; }
 
-    public bool CheckIfPossible(ObstacleHitData hitData, Transform player)
+    public bool Mirror { get; set; }
+
+    //Allow child VaultAction override this method
+    public virtual bool CheckIfPossible(ObstacleHitData hitData, Transform player)
     {
         //Check Tag
         if (!string.IsNullOrEmpty(obstacleTag) && hitData.forwardHit.transform.tag != obstacleTag)
-            return false;
-        
+            return false;        
+
         //Height Tag
         float height = hitData.heightHit.point.y - player.position.y;
         if (height < minHeight || height > maxHeight)
-            return false;        
+            return false;  
 
         if (rotateToObstacle)
             TargetRotation = Quaternion.LookRotation(-hitData.forwardHit.normal);
