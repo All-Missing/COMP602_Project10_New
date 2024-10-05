@@ -16,18 +16,22 @@ public class PlayerController1 : MonoBehaviour
     bool isGrounded;
     bool hasControl = true;
 
+    public bool IsOnLedge { get; set; }
+
     float ySpeed;
     Quaternion targetRotation;
 
     CameraController cameraController;
     Animator animator;
     CharacterController characterController;
+    EnvironmentScanner environmentScanner; //Need environmentScanner object to detect ledge height
 
     private void Awake()
     {
         cameraController = Camera.main.GetComponent<CameraController>();
         animator = GetComponent<Animator>();
-        characterController = GetComponent<CharacterController>();
+        characterController = GetComponent<CharacterController>();        
+        environmentScanner = GetComponent<EnvironmentScanner>();
     }
 
     private void Update()
@@ -44,11 +48,17 @@ public class PlayerController1 : MonoBehaviour
         if (!hasControl)
             return;
 
-        GroundCheck();
-        // Debug.Log("isGrounded = " + isGrounded);
+        GroundCheck();        
         if (isGrounded)
         {
             ySpeed = -0.5f;
+
+            IsOnLedge = environmentScanner.LedgeCheck(moveDir);
+            if (IsOnLedge)
+            {
+                Debug.Log("On Ledge");
+            }
+
         }
         else
         {
