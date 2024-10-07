@@ -48,10 +48,14 @@ public class PlayerController1 : MonoBehaviour
         if (!hasControl)
             return;
 
+        var velocity = Vector3.zero;
+
+        animator.SetBool("isGrounded", isGrounded);
         GroundCheck();        
         if (isGrounded)
         {
             ySpeed = -0.5f;
+            velocity = moveDir * moveSpeed;
 
             IsOnLedge = environmentScanner.LedgeCheck(moveDir);
             if (IsOnLedge)
@@ -63,9 +67,11 @@ public class PlayerController1 : MonoBehaviour
         else
         {
             ySpeed+= Physics.gravity.y * Time.deltaTime;
+
+            velocity = transform.forward * moveSpeed / 2;
         }
 
-        var velocity = moveDir * moveSpeed;
+        
         velocity.y = ySpeed;
 
         characterController.Move(velocity * Time.deltaTime);

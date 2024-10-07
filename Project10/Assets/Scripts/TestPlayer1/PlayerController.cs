@@ -47,6 +47,7 @@ public class PlayerController : MonoBehaviour
             return;        
 
         GroundCheck();
+        animator.SetBool("isGrounded", isGrounded);
         if (isGrounded)
         {
             ySpeed = -0.5f;

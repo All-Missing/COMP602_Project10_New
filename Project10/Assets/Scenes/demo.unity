@@ -12245,6 +12245,10 @@ PrefabInstance:
       value: Player1
       objectReference: {fileID: 0}
     - target: {fileID: 1974692166379415084, guid: d36076b840efb4c4da943874b51d5e91, type: 3}
+      propertyPath: jumpDownAction
+      value: 
+      objectReference: {fileID: 11400000, guid: c7230179654b74b4badac668fb235135, type: 2}
+    - target: {fileID: 1974692166379415084, guid: d36076b840efb4c4da943874b51d5e91, type: 3}
       propertyPath: parkourActions.Array.size
       value: 4
       objectReference: {fileID: 0}
