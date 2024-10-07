@@ -7,7 +7,7 @@ public class PauseMenu : MonoBehaviour
 
     public GameObject pauseMenuUI;
 
-    void Update()
+    void Update() // Check for key press 'Esc', turns on or off Pause Menu if active or inactive
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
@@ -22,7 +22,7 @@ public class PauseMenu : MonoBehaviour
         }
     }
 
-   public void Resume()
+   public void Resume() // Resumes the game, turning disabling the pause menu, sets timescale to 1 and locks the cursor
 {
     pauseMenuUI.SetActive(false);
     Time.timeScale = 1f;
@@ -31,7 +31,7 @@ public class PauseMenu : MonoBehaviour
     GameIsPaused = false;
 }
 
-    void Pause()
+    void Pause() // Enables the Pause Menu, stops the game and unlocks cursor
 {
     pauseMenuUI.SetActive(true);
     Time.timeScale = 0f;  // Pauses the game
@@ -39,13 +39,13 @@ public class PauseMenu : MonoBehaviour
     Cursor.lockState = CursorLockMode.None;
     GameIsPaused = true;
 }
-    public void LoadMenu()
+    public void LoadMenu() // Loads the main menu *not yet connnected
     {
         Time.timeScale = 1f; // Reset time scale
         SceneManager.LoadScene("MainMenu");
     }
 
-    public void QuitGame()
+    public void QuitGame() // Exits the application
     {
         Debug.Log("Quitting game...");
         Application.Quit();

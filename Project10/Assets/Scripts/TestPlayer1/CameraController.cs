@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class CameraController : MonoBehaviour
 {
     [SerializeField] Transform followTarget;
@@ -32,6 +33,8 @@ public class CameraController : MonoBehaviour
 
     void Update()
     {
+        if (PauseMenu.GameIsPaused) return;
+
         invertXValue = (invertX) ? -1 : 1;
         invertYValue = (invertY) ? -1 : 1;
 
