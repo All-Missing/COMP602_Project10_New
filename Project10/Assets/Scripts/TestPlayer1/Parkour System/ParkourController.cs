@@ -22,9 +22,11 @@ public class ParkourController : MonoBehaviour
 
     private void Update()
     {
+        var hitData = environmentScanner.ObstacleCheck();
+
         if (Input.GetButton("Jump") && !inAction)
         {
-            var hitData = environmentScanner.ObstacleCheck();
+            
             if (hitData.forwardHitFound)
             {
                 //For debugging obstacle objects found
@@ -41,10 +43,16 @@ public class ParkourController : MonoBehaviour
             }
         }
 
-        if (playerController.IsOnLedge && !inAction)
+        // Check if a character is on ledge of object before perfoming jumping down animation
+        if (playerController.IsOnLedge && !inAction && !hitData.forwardHitFound)
         {
-            playerController.IsOnLedge = false;
-            StartCoroutine(DoParkourAction(jumpDownAction));
+            // Double check if a ledge position is too high, then performing jumping down animation
+            if (playerController.LedgeData.angle <= 50)
+            {
+                playerController.IsOnLedge = false;
+                StartCoroutine(DoParkourAction(jumpDownAction));
+            }
+
         }
     }
 

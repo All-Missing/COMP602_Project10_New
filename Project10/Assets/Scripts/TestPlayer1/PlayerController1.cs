@@ -16,7 +16,15 @@ public class PlayerController1 : MonoBehaviour
     bool isGrounded;
     bool hasControl = true;
 
+    Vector3 desireMoveDir;
+    Vector3 moveDir;
+    Vector3 velocity;
+
+
+
     public bool IsOnLedge { get; set; }
+
+    public LedgeData LedgeData { get; set; }
 
     float ySpeed;
     Quaternion targetRotation;
@@ -43,24 +51,27 @@ public class PlayerController1 : MonoBehaviour
 
         var moveInput = (new Vector3(h, 0, v)).normalized;
 
-        var moveDir = cameraController.PlanarRotation * moveInput;
+        desireMoveDir = cameraController.PlanarRotation * moveInput;
+        moveDir = desireMoveDir;
 
         if (!hasControl)
             return;
 
-        var velocity = Vector3.zero;
+        velocity = Vector3.zero;
 
-        animator.SetBool("isGrounded", isGrounded);
+        animator.SetBool("isGrounded", isGrounded); //Trigger to perform animation when grounded
         GroundCheck();        
         if (isGrounded)
         {
             ySpeed = -0.5f;
-            velocity = moveDir * moveSpeed;
+            velocity = desireMoveDir * moveSpeed;
 
-            IsOnLedge = environmentScanner.LedgeCheck(moveDir);
+            IsOnLedge = environmentScanner.LedgeCheck(desireMoveDir, out LedgeData ledgeData);
             if (IsOnLedge)
-            {
-                Debug.Log("On Ledge");
+            {                
+                LedgeData = ledgeData;
+                LedgeMovement();
+                //Debug.Log("On Ledge");
             }
 
         }
@@ -78,7 +89,7 @@ public class PlayerController1 : MonoBehaviour
 
         if (moveAmount > 0)
         {                
-            // transform.rotation = Quaternion.LookRotation(moveDir);
+            // transform.rotation = Quaternion.LookRotation(desireMoveDir);
             targetRotation = Quaternion.LookRotation(moveDir);
         }
 
@@ -92,6 +103,18 @@ public class PlayerController1 : MonoBehaviour
     void GroundCheck()
     {
         isGrounded = Physics.CheckSphere(transform.TransformPoint(groundCheckOffSet), groundCheckRadius, groundLayer);
+    }
+
+    //This method to restrict character's movement when character position stay close to the ledge object
+    void LedgeMovement()
+    {
+        float angle = Vector3.Angle(LedgeData.surfaceHit.normal, desireMoveDir);
+
+        if (angle < 90)
+        {
+            velocity = Vector3.zero;
+            moveDir = Vector3.zero;
+        }
     }
 
     public void SetControl(bool hasControl)

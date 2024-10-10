@@ -37,8 +37,10 @@ public class EnvironmentScanner : MonoBehaviour
     }
 
     //Implement Ledge dection
-    public bool LedgeCheck(Vector3 moveDir)
+    public bool LedgeCheck(Vector3 moveDir, out LedgeData ledgeData)
     {
+        ledgeData = new LedgeData();
+
         if (moveDir == Vector3.zero)
             return false;
         
@@ -46,15 +48,23 @@ public class EnvironmentScanner : MonoBehaviour
         var origin = transform.position + (moveDir * originOffSet) + Vector3.up;
 
         if (Physics.Raycast(origin, Vector3.down, out RaycastHit hit, ledgeRayLength, obstacleLayer))
-        {
+        {        
             //Debug to dra ray if the ledge is dectect, then draw green line
             Debug.DrawRay(origin, Vector3.down * ledgeRayLength, Color.green);
-            float height = transform.position.y - hit.point.y;
 
-            if (height > ledgeHeightThreshold)
+            var surfaceRayOrigin = transform.position + moveDir - new Vector3(0, 0.1f, 0);
+            if (Physics.Raycast(surfaceRayOrigin, -moveDir, out RaycastHit surfaceHit, 2, obstacleLayer))
             {
-                return true;
-            }
+                float height = transform.position.y - hit.point.y;                
+            
+                if (height > ledgeHeightThreshold)
+                {
+                    ledgeData.angle = Vector3.Angle(transform.forward, surfaceHit.normal);
+                    ledgeData.height = height;
+                    ledgeData.surfaceHit = surfaceHit;
+                    return true;
+                }
+            }           
         }
 
         return false;
@@ -64,9 +74,15 @@ public class EnvironmentScanner : MonoBehaviour
 
 public struct ObstacleHitData
 {
-
     public bool forwardHitFound;
     public bool heightHitFound;
     public RaycastHit forwardHit;
     public RaycastHit heightHit;
+}
+
+public struct LedgeData
+{
+    public float height;
+    public float angle;
+    public RaycastHit surfaceHit;
 }
