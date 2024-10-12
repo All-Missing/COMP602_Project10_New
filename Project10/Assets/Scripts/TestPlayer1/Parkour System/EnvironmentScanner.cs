@@ -1,10 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class EnvironmentScanner : MonoBehaviour
 {
-    [SerializeField] Vector3 forwardRayOffSet = new Vector3 (0, 2.5f, 0);
+    [SerializeField] Vector3 forwardRayOffSet = new Vector3(0, 2.5f, 0);
     [SerializeField] float forwardRayLength = 0.8f;
     [SerializeField] float heightRayLength = 5f;
     [SerializeField] float ledgeRayLength = 10f;
@@ -17,10 +18,10 @@ public class EnvironmentScanner : MonoBehaviour
 
         var forwardOrigin = transform.position + forwardRayOffSet;
         hitData.forwardHitFound = Physics.Raycast(forwardOrigin, transform.forward,
-            out hitData.forwardHit,forwardRayLength, obstacleLayer);
+            out hitData.forwardHit, forwardRayLength, obstacleLayer);
 
         //Debug for handling RayCast forward direction
-        Debug.DrawRay(forwardOrigin, transform.forward * forwardRayLength, (hitData.forwardHitFound) ? Color.red : Color.white);
+        //Debug.DrawRay(forwardOrigin, transform.forward * forwardRayLength, (hitData.forwardHitFound) ? Color.red : Color.white);
 
         if (hitData.forwardHitFound)
         {
@@ -43,33 +44,41 @@ public class EnvironmentScanner : MonoBehaviour
 
         if (moveDir == Vector3.zero)
             return false;
-        
+
         float originOffSet = 0.5f;
         var origin = transform.position + (moveDir * originOffSet) + Vector3.up;
-
-        if (Physics.Raycast(origin, Vector3.down, out RaycastHit hit, ledgeRayLength, obstacleLayer))
-        {        
+        if (PhysicsUtil.ThreeRaycasts(origin, Vector3.down, 0.25f, transform,
+            out List<RaycastHit> hits, ledgeRayLength, obstacleLayer, true))
+        {
             //Debug to dra ray if the ledge is dectect, then draw green line
-            Debug.DrawRay(origin, Vector3.down * ledgeRayLength, Color.green);
+            //Debug.DrawRay(origin, Vector3.down * ledgeRayLength, Color.green);
 
-            var surfaceRayOrigin = transform.position + moveDir - new Vector3(0, 0.1f, 0);
-            if (Physics.Raycast(surfaceRayOrigin, -moveDir, out RaycastHit surfaceHit, 2, obstacleLayer))
+            var validHits = hits.Where(h => transform.position.y - h.point.y > ledgeHeightThreshold).ToList();
+
+            if (validHits.Count > 0)
             {
-                float height = transform.position.y - hit.point.y;                
-            
-                if (height > ledgeHeightThreshold)
+                // var surfaceRayOrigin = transform.position + moveDir - new Vector3(0, 0.1f, 0);
+                var surfaceRayOrigin = validHits[0].point;
+                surfaceRayOrigin.y = transform.position.y - 0.1f;
+                if (Physics.Raycast(surfaceRayOrigin, transform.position - surfaceRayOrigin, out RaycastHit surfaceHit, 2, obstacleLayer))
                 {
+                    Debug.DrawLine(surfaceRayOrigin, transform.position, Color.cyan);
+                    float height = transform.position.y - validHits[0].point.y;
+
                     ledgeData.angle = Vector3.Angle(transform.forward, surfaceHit.normal);
                     ledgeData.height = height;
                     ledgeData.surfaceHit = surfaceHit;
+                    
                     return true;
                 }
-            }           
+            }
+
+
         }
 
         return false;
     }
-    
+
 }
 
 public struct ObstacleHitData
