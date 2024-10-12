@@ -16,11 +16,9 @@ public class PlayerController1 : MonoBehaviour
     bool isGrounded;
     bool hasControl = true;
 
-    Vector3 desireMoveDir;
+    Vector3 desiredMoveDir;
     Vector3 moveDir;
     Vector3 velocity;
-
-
 
     public bool IsOnLedge { get; set; }
 
@@ -46,14 +44,11 @@ public class PlayerController1 : MonoBehaviour
     {
         float h = Input.GetAxis("Horizontal");
         float v = Input.GetAxis("Vertical");
-
         float moveAmount = Mathf.Clamp01(Mathf.Abs(h) + Mathf.Abs(v));
-
         var moveInput = (new Vector3(h, 0, v)).normalized;
 
-        desireMoveDir = cameraController.PlanarRotation * moveInput;
-        moveDir = desireMoveDir;
-
+        desiredMoveDir = cameraController.PlanarRotation * moveInput;
+        moveDir = desiredMoveDir;
         if (!hasControl)
             return;
 
@@ -64,39 +59,33 @@ public class PlayerController1 : MonoBehaviour
         if (isGrounded)
         {
             ySpeed = -0.5f;
-            velocity = desireMoveDir * moveSpeed;
+            velocity = desiredMoveDir * moveSpeed;
 
-            IsOnLedge = environmentScanner.LedgeCheck(desireMoveDir, out LedgeData ledgeData);
+            IsOnLedge = environmentScanner.LedgeCheck(desiredMoveDir, out LedgeData ledgeData);
             if (IsOnLedge)
             {                
                 LedgeData = ledgeData;
                 LedgeMovement();
                 //Debug.Log("On Ledge");
             }
-
+            animator.SetFloat("moveAmount", velocity.magnitude / moveSpeed, 0.2f, Time.deltaTime);
         }
         else
         {
             ySpeed+= Physics.gravity.y * Time.deltaTime;
-
             velocity = transform.forward * moveSpeed / 2;
         }
-
         
         velocity.y = ySpeed;
-
         characterController.Move(velocity * Time.deltaTime);
 
-        if (moveAmount > 0)
-        {                
-            // transform.rotation = Quaternion.LookRotation(desireMoveDir);
+        if ((moveAmount > 0) && (moveDir.magnitude > 0.2f))
+        {                           
             targetRotation = Quaternion.LookRotation(moveDir);
         }
 
         transform.rotation = Quaternion.RotateTowards(transform.rotation,
-            targetRotation, rotationSpeed * Time.deltaTime);
-
-        animator.SetFloat("moveAmount", moveAmount, 0.2f, Time.deltaTime);            
+            targetRotation, rotationSpeed * Time.deltaTime);                   
     }
 
     //This method to handle character ground check.
@@ -107,13 +96,29 @@ public class PlayerController1 : MonoBehaviour
 
     //This method to restrict character's movement when character position stay close to the ledge object
     void LedgeMovement()
-    {
-        float angle = Vector3.Angle(LedgeData.surfaceHit.normal, desireMoveDir);
+    {        
+        float signedAngle = Vector3.SignedAngle(LedgeData.surfaceHit.normal, desiredMoveDir, Vector3.up);
+        float angle = Mathf.Abs(signedAngle);
 
-        if (angle < 90)
+        // Stop character's move but allow character to rotate
+        if (Vector3.Angle(desiredMoveDir, transform.forward) >= 80)
+        {
+            velocity = Vector3.zero;
+            return ;
+        }
+
+        if (angle < 60)
         {
             velocity = Vector3.zero;
             moveDir = Vector3.zero;
+        }
+        else if (angle < 90) // 60 < angle < 90 angle, it limits character's velocity to horizontal direction 
+        {
+            var left = Vector3.Cross(Vector3.up, LedgeData.surfaceHit.normal);
+            var dir = left * Mathf.Sign(signedAngle);
+
+            velocity = velocity.magnitude * dir;
+            moveDir = dir;
         }
     }
 

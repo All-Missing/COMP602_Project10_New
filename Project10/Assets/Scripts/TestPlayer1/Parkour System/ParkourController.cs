@@ -44,7 +44,7 @@ public class ParkourController : MonoBehaviour
         }
 
         // Check if a character is on ledge of object before perfoming jumping down animation
-        if (playerController.IsOnLedge && !inAction && !hitData.forwardHitFound)
+        if (playerController.IsOnLedge && !inAction && !hitData.forwardHitFound && Input.GetButton("Jump"))
         {
             // Double check if a ledge position is too high, then performing jumping down animation
             if (playerController.LedgeData.angle <= 50)
