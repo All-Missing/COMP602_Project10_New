@@ -62,7 +62,7 @@ public class PlayerController1 : MonoBehaviour
             ySpeed = -0.5f;
             velocity = desiredMoveDir * moveSpeed;
 
-            IsOnLedge = environmentScanner.LedgeCheck(desiredMoveDir, out LedgeData ledgeData);
+            IsOnLedge = environmentScanner.ObstacleLedgeCheck(desiredMoveDir, out LedgeData ledgeData);
             if (IsOnLedge)
             {                
                 LedgeData = ledgeData;
