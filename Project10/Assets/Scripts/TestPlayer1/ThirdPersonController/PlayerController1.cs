@@ -15,6 +15,7 @@ public class PlayerController1 : MonoBehaviour
 
     bool isGrounded;
     bool hasControl = true;
+    public bool InAction { get; private set;}
 
     Vector3 desiredMoveDir;
     Vector3 moveDir;
@@ -104,7 +105,7 @@ public class PlayerController1 : MonoBehaviour
         if (Vector3.Angle(desiredMoveDir, transform.forward) >= 80)
         {
             velocity = Vector3.zero;
-            return ;
+            return;
         }
 
         if (angle < 60)
@@ -122,6 +123,52 @@ public class PlayerController1 : MonoBehaviour
         }
     }
 
+    public IEnumerator DoAction(string animName, MatchTargetParams matchParams,Quaternion targetRotation, bool rotate = false,
+        float postDelay = 0f, bool mirror = false)
+    {
+        InAction = true;    
+
+        animator.SetBool("mirrorAction", mirror);
+        animator.CrossFade(animName, 0.2f);
+        yield return null;
+
+        var animaState = animator.GetNextAnimatorStateInfo(0);
+        if (!animaState.IsName(animName))
+            Debug.LogError("The parkour animation is wrong!"); 
+
+        float timer = 0f;
+        while (timer <= animaState.length)
+        {
+            timer += Time.deltaTime;
+
+            // Rotate the player towards the obstacle
+            if (rotate)
+                transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
+            
+            if (matchParams != null)
+                MatchTarget(matchParams);
+            
+            //prevent player perform animation transition during in air state, gravity handles player position Y.
+            if (animator.IsInTransition(0) && timer > 0.5f)
+                break;
+
+            yield return null;
+        }
+
+        yield return new WaitForSeconds(postDelay);
+
+        InAction = false;    
+    }
+
+    void MatchTarget(MatchTargetParams mp)
+    {
+        if (animator.isMatchingTarget) return;
+
+        animator.MatchTarget(mp.pos, transform.rotation, mp.bodyPart, new MatchTargetWeightMask(mp.posWeight, 0),
+            mp.startTime, mp.targetTime);
+    }
+
+
     public void SetControl(bool hasControl)
     {
         this.hasControl = hasControl;
@@ -134,6 +181,11 @@ public class PlayerController1 : MonoBehaviour
         }
     }
 
+    public bool HasControl {
+        get => hasControl;
+        set => hasControl = value;
+    }
+
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = new Color(0, 1, 0, 0.5f);
@@ -141,4 +193,15 @@ public class PlayerController1 : MonoBehaviour
     }
 
     public float RotationSpeed => rotationSpeed;
+}
+
+
+public class MatchTargetParams
+{
+    public Vector3 pos;
+    public AvatarTarget bodyPart;
+    public Vector3 posWeight;
+    public float startTime;
+    public float targetTime;
+
 }

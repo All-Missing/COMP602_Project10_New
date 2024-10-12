@@ -6,8 +6,7 @@ public class ParkourController : MonoBehaviour
 {
     [SerializeField] List<ParkourAction> parkourActions;
     [SerializeField] ParkourAction jumpDownAction;
-
-    bool inAction;
+    [SerializeField] float autoDropHeightLimit = 1;
 
     EnvironmentScanner environmentScanner;
     Animator animator;
@@ -24,7 +23,7 @@ public class ParkourController : MonoBehaviour
     {
         var hitData = environmentScanner.ObstacleCheck();
 
-        if (Input.GetButton("Jump") && !inAction)
+        if (Input.GetButton("Jump") && !playerController.InAction)
         {
             
             if (hitData.forwardHitFound)
@@ -44,8 +43,12 @@ public class ParkourController : MonoBehaviour
         }
 
         // Check if a character is on ledge of object before perfoming jumping down animation
-        if (playerController.IsOnLedge && !inAction && !hitData.forwardHitFound && Input.GetButton("Jump"))
+        if (playerController.IsOnLedge && !playerController.InAction && !hitData.forwardHitFound)
         {
+            bool shouldJump = true;
+            if (playerController.LedgeData.height > autoDropHeightLimit && !Input.GetButton("Jump"))
+                shouldJump = false;
+
             // Double check if a ledge position is too high, then performing jumping down animation
             if (playerController.LedgeData.angle <= 50)
             {
@@ -57,41 +60,25 @@ public class ParkourController : MonoBehaviour
     }
 
     IEnumerator DoParkourAction(ParkourAction action)
-    {
-        inAction = true;
+    {       
         playerController.SetControl(false);
 
-        animator.SetBool("mirrorAction", action.Mirror);
-        animator.CrossFade(action.AnimName, 0.2f);
-        yield return null;
-
-        var animaState = animator.GetNextAnimatorStateInfo(0);
-        if (!animaState.IsName(action.AnimName))
-            Debug.LogError("The parkour animation is wrong!"); 
-
-        float timer = 0f;
-        while (timer <= animaState.length)
-        {
-            timer += Time.deltaTime;
-
-            // Rotate the player towards the obstacle
-            if (action.RotateToObstacle)
-                transform.rotation = Quaternion.RotateTowards(transform.rotation, action.TargetRotation, playerController.RotationSpeed * Time.deltaTime);
-            
-            if (action.EnableTargetMatching)
-                MatchTarget(action);
-            
-            //prevent player perform animation transition during in air state, gravity handles player position Y.
-            if (animator.IsInTransition(0) && timer > 0.5f)
-                break;
-
-            yield return null;
+        MatchTargetParams matchParams =  null;
+        if (action.EnableTargetMatching) {
+            matchParams = new MatchTargetParams()
+            {
+                pos = action.MatchPos,
+                bodyPart = action.MatchBodyPart,
+                posWeight = action.MatchPosWeight,
+                startTime = action.MatchStartTime,
+                targetTime = action.MatchTargetTime
+            };
         }
 
-        yield return new WaitForSeconds(action.PostActionDelay);
+        yield return playerController.DoAction(action.AnimName, matchParams, action.TargetRotation,
+            action.RotateToObstacle, action.PostActionDelay, action.Mirror);
 
-        playerController.SetControl(true);
-        inAction = false;    
+        playerController.SetControl(true);       
     }
 
     void MatchTarget(ParkourAction action)
