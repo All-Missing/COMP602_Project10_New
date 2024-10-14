@@ -5,25 +5,25 @@ using TMPro;
 
 public class CollectCoin : MonoBehaviour
 {
-    private int coinCount = 0; // Rename to avoid confusion with property
+    private int Coin = 0;
     public TMPro.TextMeshProUGUI CoinText; 
 
-    public int CoinCount => coinCount; // Public property to access coin count
-
-    public void OnTriggerEnter(Collider other) // Change to public
+    private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Coin"))
+        if(other.CompareTag("Coin")) 
         {
-            coinCount++; // Increment coinCount
+            Coin++;
             
             if (CoinText != null)
             {
-                CoinText.text = "Coins: " + coinCount.ToString();
+                CoinText.text = "Coins: " + Coin.ToString();
             }
 
-            Debug.Log(coinCount);
+           
+            Debug.Log(Coin);
 
-            DestroyImmediate(other.gameObject); // Use DestroyImmediate instead of Destroy
+            
+            Destroy(other.gameObject);
         }
     }
 }
