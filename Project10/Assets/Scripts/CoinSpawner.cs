@@ -14,7 +14,7 @@ public class CoinSpawner : MonoBehaviour
         StartCoroutine(SpawnCoins());
     }
 
-    IEnumerator SpawnCoins()
+    public IEnumerator SpawnCoins()
     {
         int attempts = 0;
         for (int i = 0; i < coinAmount; i++)
