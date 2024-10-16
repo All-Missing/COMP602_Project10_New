@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 4395530890750623920}
   - component: {fileID: 1974692166379415084}
   - component: {fileID: 2375444274048804437}
+  - component: {fileID: 3528887023473429772}
   m_Layer: 0
   m_Name: Player1
   m_TagString: Untagged
@@ -100,9 +101,13 @@ MonoBehaviour:
   forwardRayLength: 0.8
   heightRayLength: 5
   ledgeRayLength: 10
+  climbLedgeRayLength: 1.5
   obstacleLayer:
     serializedVersion: 2
     m_Bits: 64
+  climbLedgeLayer:
+    serializedVersion: 2
+    m_Bits: 128
   ledgeHeightThreshold: 0.75
 --- !u!114 &1974692166379415084
 MonoBehaviour:
@@ -121,6 +126,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 35dc05583429d48a2a1f4c338a790c78, type: 2}
   - {fileID: 11400000, guid: c5de03b44f5984ed9aa20e032fe15745, type: 2}
   jumpDownAction: {fileID: 11400000, guid: c7230179654b74b4badac668fb235135, type: 2}
+  autoDropHeightLimit: 1
 --- !u!114 &2375444274048804437
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -140,6 +146,18 @@ MonoBehaviour:
   groundLayer:
     serializedVersion: 2
     m_Bits: 64
+--- !u!114 &3528887023473429772
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1411300274672552268}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 772bebb7bfecf478dbc0861091b74971, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &3281181101234014947
 PrefabInstance:
   m_ObjectHideFlags: 0
