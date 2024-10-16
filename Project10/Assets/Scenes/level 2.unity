@@ -1968,11 +1968,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &340758457 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1411300274672552268, guid: d36076b840efb4c4da943874b51d5e91, type: 3}
-  m_PrefabInstance: {fileID: 1052295628}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &384039495
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6421,35 +6416,16 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player1
       objectReference: {fileID: 0}
-    - target: {fileID: 4395530890750623920, guid: d36076b840efb4c4da943874b51d5e91, type: 3}
-      propertyPath: climbLedgeLayer.m_Bits
-      value: 128
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 1411300274672552268, guid: d36076b840efb4c4da943874b51d5e91, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1052295635}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d36076b840efb4c4da943874b51d5e91, type: 3}
 --- !u!4 &1052295629 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 492618642188882066, guid: d36076b840efb4c4da943874b51d5e91, type: 3}
   m_PrefabInstance: {fileID: 1052295628}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1052295635
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 340758457}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 772bebb7bfecf478dbc0861091b74971, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!4 &1079703059 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 416874, guid: 02569c08ab29ca94481dbec225d65225, type: 3}
