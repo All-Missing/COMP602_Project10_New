@@ -26,4 +26,15 @@ public class CollectCoin : MonoBehaviour
             DestroyImmediate(other.gameObject); // Use DestroyImmediate instead of Destroy
         }
     }
+
+    // Public method to add coins manually
+    public void AddCoins(int amount)
+    {
+        coinCount += amount; // Increase the coin count by the given amount
+        if (CoinText != null)
+        {
+            CoinText.text = "Coins: " + coinCount.ToString(); // Update the UI
+        }
+        Debug.Log("Added " + amount + " coins. Total coins: " + coinCount);
+    }
 }

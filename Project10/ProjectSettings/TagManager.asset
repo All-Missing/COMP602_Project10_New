@@ -9,6 +9,7 @@ TagManager:
   - pillar
   - Terrain
   - Coin
+  - Chest
   layers:
   - Default
   - TransparentFX

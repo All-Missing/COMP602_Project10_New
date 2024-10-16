@@ -1,11 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Net.WebSockets;
 using UnityEngine;
 
 public class PlayerController1 : MonoBehaviour
 {
-    [SerializeField] float moveSpeed = 5f;
+    [SerializeField] float moveSpeed = 5f; // Keep this private if you want to maintain encapsulation
     [SerializeField] float rotationSpeed = 500f;
 
     [Header("Ground Check Setting")]
@@ -45,14 +44,13 @@ public class PlayerController1 : MonoBehaviour
             return;
 
         GroundCheck();
-        // Debug.Log("isGrounded = " + isGrounded);
         if (isGrounded)
         {
             ySpeed = -0.5f;
         }
         else
         {
-            ySpeed+= Physics.gravity.y * Time.deltaTime;
+            ySpeed += Physics.gravity.y * Time.deltaTime;
         }
 
         var velocity = moveDir * moveSpeed;
@@ -62,7 +60,6 @@ public class PlayerController1 : MonoBehaviour
 
         if (moveAmount > 0)
         {                
-            // transform.rotation = Quaternion.LookRotation(moveDir);
             targetRotation = Quaternion.LookRotation(moveDir);
         }
 
@@ -72,7 +69,6 @@ public class PlayerController1 : MonoBehaviour
         animator.SetFloat("moveAmount", moveAmount, 0.2f, Time.deltaTime);            
     }
 
-    //This method to handle character ground check.
     void GroundCheck()
     {
         isGrounded = Physics.CheckSphere(transform.TransformPoint(groundCheckOffSet), groundCheckRadius, groundLayer);
@@ -94,6 +90,12 @@ public class PlayerController1 : MonoBehaviour
     {
         Gizmos.color = new Color(0, 1, 0, 0.5f);
         Gizmos.DrawSphere(transform.TransformPoint(groundCheckOffSet), groundCheckRadius);    
+    }
+
+    public float MoveSpeed // New property for access
+    {
+        get => moveSpeed;
+        set => moveSpeed = value; // Allows setting the speed from outside
     }
 
     public float RotationSpeed => rotationSpeed;
