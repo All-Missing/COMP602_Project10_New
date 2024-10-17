@@ -12,6 +12,8 @@ GameObject:
   - component: {fileID: 5657102108548504214}
   - component: {fileID: 3479721309218053455}
   - component: {fileID: 8580378991958455397}
+  - component: {fileID: 8231246996483744254}
+  - component: {fileID: 5950447784610218826}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -77,9 +79,9 @@ CharacterController:
   m_Radius: 0.2
   m_SlopeLimit: 45
   m_StepOffset: 0.3
-  m_SkinWidth: 0.08
+  m_SkinWidth: 0.02
   m_MinMoveDistance: 0.001
-  m_Center: {x: 0, y: 0.9, z: 0.08}
+  m_Center: {x: 0, y: 0.87, z: 0.08}
 --- !u!95 &8580378991958455397
 Animator:
   serializedVersion: 5
@@ -93,7 +95,7 @@ Animator:
   m_Controller: {fileID: 9100000, guid: 97b74bbe7be4f4b4e9874773af80cbe9, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
-  m_ApplyRootMotion: 0
+  m_ApplyRootMotion: 1
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
   m_WarningMessage: 
@@ -101,6 +103,40 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &8231246996483744254
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7541667670889608303}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b18d821f9dfd484092714714d7fa3a8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  forwardRayOffSet: {x: 0, y: 0.25, z: 0}
+  forwardRayLength: 0.8
+  heightRayLength: 5
+  obstacleLayer:
+    serializedVersion: 2
+    m_Bits: 64
+--- !u!114 &5950447784610218826
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7541667670889608303}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f9b7d1424b3e346c0b6e25c68bd49988, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  parkourActions:
+  - {fileID: 11400000, guid: b012ac5868c7c45949924f9909f32571, type: 2}
+  - {fileID: 11400000, guid: 35dc05583429d48a2a1f4c338a790c78, type: 2}
+  - {fileID: 11400000, guid: c5de03b44f5984ed9aa20e032fe15745, type: 2}
 --- !u!1001 &6816690716226006318
 PrefabInstance:
   m_ObjectHideFlags: 0
