@@ -41,9 +41,7 @@ public class EnvironmentScanner : MonoBehaviour
 
     public bool ClimbLedgeCheck(Vector3 dir, out RaycastHit ledgeHit)
     {
-
         ledgeHit = new RaycastHit();
-
         if (dir == Vector3.zero)
             return false;
 

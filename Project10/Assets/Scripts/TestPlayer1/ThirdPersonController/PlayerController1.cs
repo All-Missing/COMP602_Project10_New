@@ -15,7 +15,6 @@ public class PlayerController1 : MonoBehaviour
 
     bool isGrounded;
     bool hasControl = true;
-
     
     public bool InAction { get; private set; }
     public bool IsHanging { get; set; }
