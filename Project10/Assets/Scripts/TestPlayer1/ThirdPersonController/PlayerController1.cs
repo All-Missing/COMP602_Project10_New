@@ -15,7 +15,9 @@ public class PlayerController1 : MonoBehaviour
 
     bool isGrounded;
     bool hasControl = true;
-    public bool InAction { get; private set;}
+    
+    public bool InAction { get; private set; }
+    public bool IsHanging { get; set; }
 
     Vector3 desiredMoveDir;
     Vector3 moveDir;
@@ -52,6 +54,9 @@ public class PlayerController1 : MonoBehaviour
         moveDir = desiredMoveDir;
         if (!hasControl)
             return;
+
+        if (IsHanging)
+            return;    
 
         velocity = Vector3.zero;
 
