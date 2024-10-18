@@ -188,9 +188,6 @@ public class PlayerController1Tests
         Assert.AreEqual(moveSpeed, velocity.z, "Velocity should be updated based on moveSpeed and input direction.");
     }
 
-
-
-
     [Test]
     public void PlayerShouldRotateTowardsMoveDirection()
     {
@@ -294,10 +291,6 @@ public class PlayerController1Tests
         float moveAmount = animator.GetFloat("moveAmount");
         Assert.AreEqual(1.0f, moveAmount, 0.1f); // Expecting a value close to 1 for forward movement
     }
-
-
-
-
 
 
 }
