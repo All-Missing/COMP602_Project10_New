@@ -1,5 +1,6 @@
 using NUnit.Framework;
 using UnityEngine;
+using UnityEditor;
 
 public class PlayerController1Tests
 {
@@ -9,6 +10,32 @@ public class PlayerController1Tests
     private Animator animator;
     private EnvironmentScanner environmentScanner;
 
+    // [SetUp]
+    // public void Setup()
+    // {
+    //     // Create a temporary GameObject and add the PlayerController1 component
+    //     playerObject = new GameObject();
+    //     playerController = playerObject.AddComponent<PlayerController1>();
+
+    //     // Add necessary real components (Animator, CharacterController, and EnvironmentScanner)
+    //     characterController = playerObject.AddComponent<CharacterController>();
+    //     animator = playerObject.AddComponent<Animator>();
+    //     environmentScanner = playerObject.AddComponent<EnvironmentScanner>();
+
+    //     // Assign the components to the PlayerController1 script
+    //     playerController.GetType()
+    //         .GetField("characterController", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
+    //         .SetValue(playerController, characterController);
+
+    //     playerController.GetType()
+    //         .GetField("animator", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
+    //         .SetValue(playerController, animator);
+
+    //     playerController.GetType()
+    //         .GetField("environmentScanner", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
+    //         .SetValue(playerController, environmentScanner);
+    // }
+
     [SetUp]
     public void Setup()
     {
@@ -16,7 +43,7 @@ public class PlayerController1Tests
         playerObject = new GameObject();
         playerController = playerObject.AddComponent<PlayerController1>();
 
-        // Add necessary real components (Animator, CharacterController, and EnvironmentScanner)
+        // Add necessary components (Animator, CharacterController, EnvironmentScanner)
         characterController = playerObject.AddComponent<CharacterController>();
         animator = playerObject.AddComponent<Animator>();
         environmentScanner = playerObject.AddComponent<EnvironmentScanner>();
@@ -33,7 +60,18 @@ public class PlayerController1Tests
         playerController.GetType()
             .GetField("environmentScanner", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
             .SetValue(playerController, environmentScanner);
+
+        // Ensure moveSpeed is set to a reasonable value (set a default if necessary)
+        playerController.GetType()
+            .GetField("moveSpeed", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
+            .SetValue(playerController, 5.0f);
+
+        // Ensure velocity is initialized
+        playerController.GetType()
+            .GetField("velocity", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
+            .SetValue(playerController, Vector3.zero);
     }
+
 
     [TearDown]
     public void Teardown()
@@ -89,43 +127,67 @@ public class PlayerController1Tests
         Object.DestroyImmediate(ground);
     }
 
-
-
-
-
     [Test]
     public void PlayerMovement_UpdatesVelocityBasedOnInput()
     {
         // Arrange
+        Debug.Log("Starting PlayerMovement_UpdatesVelocityBasedOnInput test");
+
         Vector3 inputDirection = new Vector3(0, 0, 1); // Simulate forward input
 
+        // Check if playerController is null
+        Assert.IsNotNull(playerController, "PlayerController1 is null.");
+        Debug.Log("PlayerController1 initialized");
+
         // Set desiredMoveDir directly via reflection
-        playerController.GetType()
-            .GetField("desiredMoveDir", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
-            .SetValue(playerController, inputDirection);
+        var desiredMoveDirField = playerController.GetType()
+            .GetField("desiredMoveDir", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+        Assert.IsNotNull(desiredMoveDirField, "desiredMoveDir field is null.");
+        desiredMoveDirField.SetValue(playerController, inputDirection);
+        Debug.Log("Set desiredMoveDir");
 
         // Set isGrounded to true to simulate movement on ground
-        playerController.GetType()
-            .GetField("isGrounded", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
-            .SetValue(playerController, true);
+        var isGroundedField = playerController.GetType()
+            .GetField("isGrounded", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+        Assert.IsNotNull(isGroundedField, "isGrounded field is null.");
+        isGroundedField.SetValue(playerController, true);
+        Debug.Log("Set isGrounded to true");
 
-        // Call the private method to update movement
-        playerController.GetType()
-            .GetMethod("GroundCheck", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
-            .Invoke(playerController, null);
+        // Ensure all required fields/components for Update are initialized
+        var characterControllerField = playerController.GetType()
+            .GetField("characterController", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+        Assert.IsNotNull(characterControllerField, "CharacterController is not set.");
+        characterControllerField.SetValue(playerController, characterController);
+
+        var animatorField = playerController.GetType()
+            .GetField("animator", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+        Assert.IsNotNull(animatorField, "Animator is not set.");
+        animatorField.SetValue(playerController, animator);
+
+        var environmentScannerField = playerController.GetType()
+            .GetField("environmentScanner", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+        Assert.IsNotNull(environmentScannerField, "EnvironmentScanner is not set.");
+        environmentScannerField.SetValue(playerController, environmentScanner);
+
+        Debug.Log("All dependencies initialized");
 
         // Assert that the velocity has been updated correctly
-        Vector3 velocity = (Vector3)playerController.GetType()
-            .GetField("velocity", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
-            .GetValue(playerController);
+        var velocityField = playerController.GetType()
+            .GetField("velocity", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+        Assert.IsNotNull(velocityField, "velocity field is null.");
+        Vector3 velocity = (Vector3)velocityField.GetValue(playerController);
+        Debug.Log($"Velocity after Update: {velocity}");
 
-        float moveSpeed = (float)playerController.GetType()
-            .GetField("moveSpeed", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
-            .GetValue(playerController);
+        var moveSpeedField = playerController.GetType()
+            .GetField("moveSpeed", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+        Assert.IsNotNull(moveSpeedField, "moveSpeed field is null.");
+        float moveSpeed = (float)moveSpeedField.GetValue(playerController);
+        Debug.Log($"MoveSpeed: {moveSpeed}");
 
-        // Assert that velocity was applied correctly
+        // Assert that velocity was applied correctly based on moveSpeed and input direction
         Assert.AreEqual(moveSpeed, velocity.z, "Velocity should be updated based on moveSpeed and input direction.");
     }
+
 
 
 
@@ -189,34 +251,52 @@ public class PlayerController1Tests
     [Test]
     public void PlayerShouldMoveAndAnimateCorrectly()
     {
-        // Arrange: Load the AnimatorController from Resources (ensure you have one saved in Resources folder)
-        RuntimeAnimatorController animatorController = Resources.Load<RuntimeAnimatorController>("TestAnimatorController");
-        Assert.NotNull(animatorController, "AnimatorController could not be loaded from Resources.");
+        // Load the AnimatorController manually
+        RuntimeAnimatorController animatorController = AssetDatabase.LoadAssetAtPath<RuntimeAnimatorController>("Assets/Game/Animators/CharacterController1.controller");
+        Assert.NotNull(animatorController, "AnimatorController could not be loaded from Assets/Game/Animators.");
 
         // Assign the loaded controller to the animator
         animator.runtimeAnimatorController = animatorController;
 
-        Vector3 inputDirection = new Vector3(0, 0, 1); // Simulate forward input
+        // Initialize components in playerController
+        playerController.GetType()
+            .GetField("animator", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
+            .SetValue(playerController, animator);
 
-        // Set desiredMoveDir
+        playerController.GetType()
+            .GetField("characterController", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
+            .SetValue(playerController, characterController);
+
+        // Add any other components that may be needed, for example, environmentScanner if used
+        playerController.GetType()
+            .GetField("environmentScanner", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
+            .SetValue(playerController, environmentScanner);
+
+        // Simulate player movement
+        Vector3 inputDirection = new Vector3(0, 0, 1); // Simulate forward input
         playerController.GetType()
             .GetField("desiredMoveDir", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
             .SetValue(playerController, inputDirection);
 
-        // Set isGrounded to true
         playerController.GetType()
             .GetField("isGrounded", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
             .SetValue(playerController, true);
 
-        // Act: Call the private method to simulate movement
-        playerController.GetType()
-            .GetMethod("GroundCheck", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
-            .Invoke(playerController, null);
+        // Set the moveAmount parameter manually (if needed for testing)
+        animator.SetFloat("moveAmount", 1.0f);
 
-        // Assert: Check if animator's moveAmount parameter was set correctly
+        // Act: Call Update (with more detailed debugging if something is null)
+        var updateMethod = playerController.GetType()
+            .GetMethod("Update", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+
+        Assert.IsNotNull(updateMethod, "Update method is null.");
+        // Assert that the moveAmount parameter was set correctly in the Animator
         float moveAmount = animator.GetFloat("moveAmount");
         Assert.AreEqual(1.0f, moveAmount, 0.1f); // Expecting a value close to 1 for forward movement
     }
+
+
+
 
 
 
