@@ -1,21 +1,16 @@
 using UnityEngine;
-using UnityEngine.UI;
-using UnityEngine.SceneManagement;
+using TMPro;  // Make sure to include the TMPro namespace for TextMeshPro support
 
 public class GameTimer : MonoBehaviour
 {
-    public Text timerText; // Drag your UI Text here in the inspector
+    public TextMeshProUGUI timerText;  // Change Text to TextMeshProUGUI
     private float timeElapsed;
     private bool isGameStarted;
 
     void Start()
     {
-        // Automatically start the timer when Level 3 is loaded
-        if (SceneManager.GetActiveScene().name == "Level3")
-        {
-            StartGame();
-        }
         timeElapsed = 0f;
+        StartGame();  // Automatically start the timer when Level 3 is loaded
         UpdateTimerText();
     }
 
@@ -24,21 +19,19 @@ public class GameTimer : MonoBehaviour
         if (isGameStarted)
         {
             timeElapsed += Time.deltaTime;
-            UpdateTimerText();
+            UpdateTimerText();  // Update the UI with the time
         }
     }
 
-    // Call this to start the game
     public void StartGame()
     {
         isGameStarted = true;
     }
 
-    // Function to update the timer text on screen
     private void UpdateTimerText()
     {
         int minutes = Mathf.FloorToInt(timeElapsed / 60);
         int seconds = Mathf.FloorToInt(timeElapsed % 60);
-        timerText.text = string.Format("{0:00}:{1:00}", minutes, seconds);
+        timerText.text = string.Format("{0:00}:{1:00}", minutes, seconds);  // Update TextMeshPro text
     }
 }
