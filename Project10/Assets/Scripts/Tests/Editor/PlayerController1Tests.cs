@@ -204,19 +204,56 @@ public class PlayerController1Tests
             .GetField("hasControl", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
             .SetValue(playerController, true);
 
-        // Act: Call Update (this will trigger the rotation logic based on move direction)
-        playerController.GetType()
-            .GetMethod("GroundCheck", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
-            .Invoke(playerController, null);
+        // Load the AnimatorController from the correct folder
+        RuntimeAnimatorController animatorController = AssetDatabase.LoadAssetAtPath<RuntimeAnimatorController>("Assets/Game/Animators/CharacterController1.controller");
+        Assert.NotNull(animatorController, "AnimatorController could not be loaded from the specified path.");
+
+        // Set the animator controller in the animator component
+        animator.runtimeAnimatorController = animatorController;
+
+        // Ensure necessary fields are initialized before calling Update
+        var characterControllerField = playerController.GetType()
+            .GetField("characterController", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+        Assert.IsNotNull(characterControllerField, "CharacterController field is null.");
+        characterControllerField.SetValue(playerController, characterController);
+
+        var animatorField = playerController.GetType()
+            .GetField("animator", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+        Assert.IsNotNull(animatorField, "Animator field is null.");
+        animatorField.SetValue(playerController, animator);
+
+        // Initialize velocity and moveSpeed if required in Update
+        var velocityField = playerController.GetType()
+            .GetField("velocity", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+        Assert.IsNotNull(velocityField, "Velocity field is null.");
+        velocityField.SetValue(playerController, Vector3.zero);
+
+        var moveSpeedField = playerController.GetType()
+            .GetField("moveSpeed", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+        Assert.IsNotNull(moveSpeedField, "MoveSpeed field is null.");
+        moveSpeedField.SetValue(playerController, 5.0f);
+
+        // Act: Call the Update method to trigger the rotation logic
+        var updateMethod = playerController.GetType()
+            .GetMethod("Update", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+        Assert.IsNotNull(updateMethod, "Update method is null.");
+
+        // Invoke the Update method to apply rotation
+        updateMethod.Invoke(playerController, null);
 
         // Retrieve the targetRotation after the update
-        Quaternion targetRotation = (Quaternion)playerController.GetType()
-            .GetField("targetRotation", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
-            .GetValue(playerController);
+        var targetRotationField = playerController.GetType()
+            .GetField("targetRotation", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+        Assert.IsNotNull(targetRotationField, "TargetRotation field is null.");
+        Quaternion targetRotation = (Quaternion)targetRotationField.GetValue(playerController);
+
+        // Expected rotation for moving right (should be 90 degrees around Y-axis)
+        Quaternion expectedRotation = Quaternion.LookRotation(moveDirection);
 
         // Assert: Ensure the player rotates towards the right (matching the move direction)
-        Assert.AreEqual(Quaternion.LookRotation(moveDirection), targetRotation, "Player should rotate towards the move direction.");
+        Assert.AreEqual(expectedRotation, targetRotation, "Player should rotate towards the move direction.");
     }
+
 
 
     [Test]
