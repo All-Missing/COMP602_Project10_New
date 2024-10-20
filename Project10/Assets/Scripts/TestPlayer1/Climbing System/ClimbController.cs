@@ -29,6 +29,13 @@ public class ClimbController : MonoBehaviour
         }
         else
         {
+            if (Input.GetButton("Drop") && !playerController.InAction)
+            {
+                
+                StartCoroutine(JumpFromHang());
+                return;
+            }
+
             // Once character is hanging a ledge object, character performs hop up/right/drop
             float h = Mathf.Round(Input.GetAxisRaw("Horizontal"));
             float v = Mathf.Round(Input.GetAxisRaw("Vertical"));
@@ -98,6 +105,13 @@ public class ClimbController : MonoBehaviour
 
         var hDir = (hand == AvatarTarget.RightHand) ? ledge.right : -ledge.right;
         return ledge.position + (ledge.forward * offVal.z) + (Vector3.up * offVal.y) - (hDir * offVal.x);
+    }
+
+    IEnumerator JumpFromHang()
+    {
+        playerController.IsHanging = false;
+        yield return playerController.DoAction("JumpFromHang");
+        playerController.SetControl(true);
     }
 
 }

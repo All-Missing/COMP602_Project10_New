@@ -128,8 +128,8 @@ public class PlayerController1 : MonoBehaviour
         }
     }
 
-    public IEnumerator DoAction(string animName, MatchTargetParams matchParams,Quaternion targetRotation, bool rotate = false,
-        float postDelay = 0f, bool mirror = false)
+    public IEnumerator DoAction(string animName, MatchTargetParams matchParams=null, Quaternion targetRotation=new Quaternion(),
+        bool rotate = false, float postDelay = 0f, bool mirror = false)
     {
         InAction = true;    
 
@@ -188,7 +188,13 @@ public class PlayerController1 : MonoBehaviour
         }
     }
 
-    public bool HasControl {
+    public void ResetTargetRotation()
+    {
+        targetRotation = transform.rotation;
+    }
+
+    public bool HasControl
+    {
         get => hasControl;
         set => hasControl = value;
     }
