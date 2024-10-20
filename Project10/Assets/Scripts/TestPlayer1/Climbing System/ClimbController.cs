@@ -34,6 +34,10 @@ public class ClimbController : MonoBehaviour
             float v = Mathf.Round(Input.GetAxisRaw("Vertical"));
             var inputDir = new Vector2(h, v);
 
+            // If player in action, then it won't any perform animations below
+            if (playerController.InAction || inputDir == Vector2.zero)
+                return;
+
             var neigbour = currentPoint.GetNeighbour(inputDir);            
             if (neigbour == null) // If there is no next neighbour obj, character won't perform any animation
                 return;
