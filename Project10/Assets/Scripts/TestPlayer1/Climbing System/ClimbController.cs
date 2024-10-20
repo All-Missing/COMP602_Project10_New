@@ -55,18 +55,30 @@ public class ClimbController : MonoBehaviour
                     StartCoroutine(JumpToLedge("HangHopRight", currentPoint.transform, 0.20f, 0.50f));
                 else if (neigbour.direction.x == -1)
                     StartCoroutine(JumpToLedge("HangHopLeft", currentPoint.transform, 0.20f, 0.50f));         
+            }
+            else if (neigbour.connectionType == ConnectionType.Move)
+            {
+                currentPoint = neigbour.point;
+
+                if (neigbour.direction.x == 1)
+                    StartCoroutine(JumpToLedge("ShimmyRight", currentPoint.transform, 0.0f, 0.38f));
+                else if (neigbour.direction.x == -1)
+                    StartCoroutine(JumpToLedge("ShimmyLeft", currentPoint.transform, 0.0f, 0.38f));
+                
+
             }    
 
         }
     }
 
-    IEnumerator JumpToLedge(string anim, Transform ledge, float matchStartTime, float matchTargetTime)
+    IEnumerator JumpToLedge(string anim, Transform ledge, float matchStartTime, float matchTargetTime,
+        AvatarTarget hand=AvatarTarget.RightHand)
     {
         var matchParams = new MatchTargetParams()
         {
             //Ensure that all the ledge objects are facing forward vector
-            pos = GetHandPos(ledge),
-            bodyPart = AvatarTarget.RightHand,
+            pos = GetHandPos(ledge, hand),
+            bodyPart = hand,
             startTime = matchStartTime,
             targetTime = matchTargetTime,
             posWeight = Vector3.one
@@ -79,9 +91,10 @@ public class ClimbController : MonoBehaviour
         playerController.IsHanging = true;
     }
 
-    Vector3 GetHandPos(Transform ledge)
+    Vector3 GetHandPos(Transform ledge, AvatarTarget hand)
     {
-        return ledge.position + (ledge.forward * 0.1f) + (Vector3.up * 0.1f) - (ledge.right * 0.25f);
+        var hDir = (hand == AvatarTarget.RightHand) ? ledge.right : -ledge.right;
+        return ledge.position + (ledge.forward * 0.1f) + (Vector3.up * 0.1f) - (hDir * 0.25f);
     }
 
 }
