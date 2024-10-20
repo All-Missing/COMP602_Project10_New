@@ -44,7 +44,17 @@ public class ClimbController : MonoBehaviour
             // If player in action, then it won't any perform animations below
             if (playerController.InAction || inputDir == Vector2.zero)
                 return;
+                
 
+            // if player has press "Up" input, then player peforms mount animation
+            // Mount from the hanging state
+            if (currentPoint.MountPoint && inputDir.y == 1)
+            {
+                StartCoroutine(MountFromHang());
+                return;
+            }
+
+            // Seeking for negbour ledge, then perfrom ledge to ledge jump animation 
             var neigbour = currentPoint.GetNeighbour(inputDir);            
             if (neigbour == null) // If there is no next neighbour obj, character won't perform any animation
                 return;
@@ -111,6 +121,19 @@ public class ClimbController : MonoBehaviour
     {
         playerController.IsHanging = false;
         yield return playerController.DoAction("JumpFromHang");
+        //After player perfroms "JumpFromHang" animation, it would be best to reset player rotation to avoid any weird animation
+        playerController.ResetTargetRotation(); //Fix rotation after character drop to the ground
+        playerController.SetControl(true);
+    }
+
+    IEnumerator MountFromHang()
+    {
+        playerController.IsHanging = false;
+        yield return playerController.DoAction("MountFromHang");
+        yield return new WaitForSeconds(0.5f);
+
+        //After player perfroms "MountFromHang" animation, it would be best to reset player rotation to avoid any weird animation
+        playerController.ResetTargetRotation();
         playerController.SetControl(true);
     }
 

@@ -6102,6 +6102,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: LongLedge (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 3062705746325033033, guid: 092beaafd75064cc0af1c280f784339f, type: 3}
+      propertyPath: mountPoint
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5854166822432564225, guid: 092beaafd75064cc0af1c280f784339f, type: 3}
+      propertyPath: mountPoint
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5854166822432564225, guid: 092beaafd75064cc0af1c280f784339f, type: 3}
       propertyPath: neighbours.Array.data[0].point
       value: 
@@ -6113,6 +6121,10 @@ PrefabInstance:
     - target: {fileID: 5854166822432564225, guid: 092beaafd75064cc0af1c280f784339f, type: 3}
       propertyPath: neighbours.Array.data[0].direction.x
       value: -1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6109191400276611454, guid: 092beaafd75064cc0af1c280f784339f, type: 3}
+      propertyPath: mountPoint
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6639834532369789602, guid: 092beaafd75064cc0af1c280f784339f, type: 3}
       propertyPath: m_LocalScale.x
@@ -6631,6 +6643,18 @@ PrefabInstance:
     - target: {fileID: 1118704816544743726, guid: 092beaafd75064cc0af1c280f784339f, type: 3}
       propertyPath: m_Name
       value: LongLedge (3)
+      objectReference: {fileID: 0}
+    - target: {fileID: 3062705746325033033, guid: 092beaafd75064cc0af1c280f784339f, type: 3}
+      propertyPath: mountPoint
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5854166822432564225, guid: 092beaafd75064cc0af1c280f784339f, type: 3}
+      propertyPath: mountPoint
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6109191400276611454, guid: 092beaafd75064cc0af1c280f784339f, type: 3}
+      propertyPath: mountPoint
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6639834532369789602, guid: 092beaafd75064cc0af1c280f784339f, type: 3}
       propertyPath: m_LocalScale.x
@@ -7837,6 +7861,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: LongLedge (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 3062705746325033033, guid: 092beaafd75064cc0af1c280f784339f, type: 3}
+      propertyPath: mountPoint
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5854166822432564225, guid: 092beaafd75064cc0af1c280f784339f, type: 3}
+      propertyPath: mountPoint
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5854166822432564225, guid: 092beaafd75064cc0af1c280f784339f, type: 3}
       propertyPath: neighbours.Array.data[0].point
       value: 
@@ -7848,6 +7880,10 @@ PrefabInstance:
     - target: {fileID: 5854166822432564225, guid: 092beaafd75064cc0af1c280f784339f, type: 3}
       propertyPath: neighbours.Array.data[0].direction.x
       value: -1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6109191400276611454, guid: 092beaafd75064cc0af1c280f784339f, type: 3}
+      propertyPath: mountPoint
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6639834532369789602, guid: 092beaafd75064cc0af1c280f784339f, type: 3}
       propertyPath: m_LocalScale.x
@@ -13186,6 +13222,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: LongLedge
       objectReference: {fileID: 0}
+    - target: {fileID: 3062705746325033033, guid: 092beaafd75064cc0af1c280f784339f, type: 3}
+      propertyPath: mountPoint
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5854166822432564225, guid: 092beaafd75064cc0af1c280f784339f, type: 3}
+      propertyPath: mountPoint
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5854166822432564225, guid: 092beaafd75064cc0af1c280f784339f, type: 3}
       propertyPath: neighbours.Array.data[0].point
       value: 
@@ -13197,6 +13241,10 @@ PrefabInstance:
     - target: {fileID: 5854166822432564225, guid: 092beaafd75064cc0af1c280f784339f, type: 3}
       propertyPath: neighbours.Array.data[0].direction.x
       value: -1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6109191400276611454, guid: 092beaafd75064cc0af1c280f784339f, type: 3}
+      propertyPath: mountPoint
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6639834532369789602, guid: 092beaafd75064cc0af1c280f784339f, type: 3}
       propertyPath: m_LocalPosition.x

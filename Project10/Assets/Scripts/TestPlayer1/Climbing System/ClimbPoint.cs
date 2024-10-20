@@ -4,8 +4,9 @@ using UnityEngine;
 
 public class ClimbPoint : MonoBehaviour
 {
+    [SerializeField] bool mountPoint; 
     [SerializeField] List<Neighbour> neighbours;
-    
+
     private void Awake()
     {
         var twoWayNeighbours = neighbours.Where(n => n.isTwoWay);
@@ -52,6 +53,8 @@ public class ClimbPoint : MonoBehaviour
                 Debug.DrawLine(transform.position, neigbour.point.transform.position, neigbour.isTwoWay? Color.green : Color.gray);
         }
     }
+
+    public bool MountPoint => mountPoint;
 }
 
 [System.Serializable]
