@@ -28,6 +28,20 @@ public class ClimbPoint : MonoBehaviour
         neighbours.Add(neigbour);
     }
 
+    //a method to retrieve neighbour point x and y, which position connected of this ledge object next to one
+    public Neighbour GetNeighbour(Vector2 direction)
+    {
+        Neighbour neighbour = null;
+
+        if (direction.y != 0)
+            neighbour = neighbours.FirstOrDefault(n => n.direction.y == direction.y);
+
+        if (neighbour == null && direction.x != 0)
+            neighbour = neighbours.FirstOrDefault(n => n.direction.x == direction.x);
+
+        return neighbour;       
+    }
+
     //For testing drawing line between 2 ledge objects
     private void OnDrawGizmos()
     {

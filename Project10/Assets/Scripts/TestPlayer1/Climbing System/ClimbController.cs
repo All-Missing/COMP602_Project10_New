@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class ClimbController : MonoBehaviour
 {
+    ClimbPoint currentPoint;
     PlayerController1 playerController;
     EnvironmentScanner envScanner;
 
@@ -20,6 +21,7 @@ public class ClimbController : MonoBehaviour
             {
                 if (envScanner.ClimbLedgeCheck(transform.forward, out RaycastHit ledgeHit))
                 {
+                    currentPoint = ledgeHit.transform.GetComponent<ClimbPoint>();
                     playerController.SetControl(false);
                     StartCoroutine(JumpToLedge("IdleToHang", ledgeHit.transform, 0.41f, 0.54f));
                 }
@@ -27,6 +29,29 @@ public class ClimbController : MonoBehaviour
         }
         else
         {
+            // Once character is hanging a ledge object, character performs hop up/right/drop
+            float h = Mathf.Round(Input.GetAxisRaw("Horizontal"));
+            float v = Mathf.Round(Input.GetAxisRaw("Vertical"));
+            var inputDir = new Vector2(h, v);
+
+            var neigbour = currentPoint.GetNeighbour(inputDir);            
+            if (neigbour == null) // If there is no next neighbour obj, character won't perform any animation
+                return;
+
+            // This perform hop up, hop down animations while player is hanging and pressing jump hotkey
+            if (neigbour.connectionType == ConnectionType.Jump && Input.GetButton("Jump"))
+            {
+                currentPoint = neigbour.point;
+
+                if (neigbour.direction.y == 1)
+                    StartCoroutine(JumpToLedge("HangHopUp", currentPoint.transform, 0.35f, 0.65f));
+                else if (neigbour.direction.y == -1)
+                    StartCoroutine(JumpToLedge("HangHopDown", currentPoint.transform, 0.31f, 0.65f));
+                else if (neigbour.direction.x == 1)
+                    StartCoroutine(JumpToLedge("HangHopRight", currentPoint.transform, 0.20f, 0.50f));
+                else if (neigbour.direction.x == -1)
+                    StartCoroutine(JumpToLedge("HangHopLeft", currentPoint.transform, 0.20f, 0.50f));         
+            }    
 
         }
     }
