@@ -48,7 +48,7 @@ public class PlayerController1 : MonoBehaviour
         float h = Input.GetAxis("Horizontal");
         float v = Input.GetAxis("Vertical");
         float moveAmount = Mathf.Clamp01(Mathf.Abs(h) + Mathf.Abs(v));
-        var moveInput = (new Vector3(h, 0, v)).normalized;
+        var moveInput = new Vector3(h, 0, v).normalized;
 
         desiredMoveDir = cameraController.PlanarRotation * moveInput;
         moveDir = desiredMoveDir;
@@ -60,8 +60,8 @@ public class PlayerController1 : MonoBehaviour
 
         velocity = Vector3.zero;
 
-        animator.SetBool("isGrounded", isGrounded); //Trigger to perform animation when grounded
         GroundCheck();        
+        animator.SetBool("isGrounded", isGrounded); //Trigger to perform animation when grounded
         if (isGrounded)
         {
             ySpeed = -0.5f;
@@ -173,7 +173,6 @@ public class PlayerController1 : MonoBehaviour
             mp.startTime, mp.targetTime);
     }
 
-
     public void SetControl(bool hasControl)
     {
         this.hasControl = hasControl;
@@ -181,7 +180,7 @@ public class PlayerController1 : MonoBehaviour
 
         if (!hasControl)
         {
-            animator.SetFloat("moveAround", 0f);
+            animator.SetFloat("moveAmount", 0f);
             targetRotation = transform.rotation;
         }
     }

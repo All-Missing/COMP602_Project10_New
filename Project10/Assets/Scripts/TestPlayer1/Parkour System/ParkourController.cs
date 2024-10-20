@@ -22,10 +22,8 @@ public class ParkourController : MonoBehaviour
     private void Update()
     {
         var hitData = environmentScanner.ObstacleCheck();
-
         if (Input.GetButton("Jump") && !playerController.InAction)
-        {
-            
+        {            
             if (hitData.forwardHitFound)
             {
                 //For debugging obstacle objects found
@@ -38,7 +36,6 @@ public class ParkourController : MonoBehaviour
                         break;
                     }
                 }
-
             }
         }
 

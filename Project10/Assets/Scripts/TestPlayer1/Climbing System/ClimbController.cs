@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class ClimbController : MonoBehaviour
@@ -13,16 +12,14 @@ public class ClimbController : MonoBehaviour
         envScanner = GetComponent<EnvironmentScanner>();
     }
 
-
     private void Update()
-    {
+    {       
         if (!playerController.IsHanging)
         {
             if (Input.GetButton("Jump") && !playerController.InAction)
             {
                 if (envScanner.ClimbLedgeCheck(transform.forward, out RaycastHit ledgeHit))
                 {
-                    // Debug.Log("Climb Ledge Found");
                     playerController.SetControl(false);
                     StartCoroutine(JumpToLedge("IdleToHang", ledgeHit.transform, 0.41f, 0.54f));
                 }
@@ -30,15 +27,14 @@ public class ClimbController : MonoBehaviour
         }
         else
         {
-            // Ledge to Ledge Jump
-        }
 
+        }
     }
 
     IEnumerator JumpToLedge(string anim, Transform ledge, float matchStartTime, float matchTargetTime)
     {
         var matchParams = new MatchTargetParams()
-        {   
+        {
             //Ensure that all the ledge objects are facing forward vector
             pos = GetHandPos(ledge),
             bodyPart = AvatarTarget.RightHand,
