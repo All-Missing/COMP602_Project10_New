@@ -21,9 +21,20 @@ public class ClimbController : MonoBehaviour
             {
                 if (envScanner.ClimbLedgeCheck(transform.forward, out RaycastHit ledgeHit))
                 {
-                    currentPoint = ledgeHit.transform.GetComponent<ClimbPoint>();
+                    currentPoint = GetNearestClimbPoint(ledgeHit.transform, ledgeHit.point);
                     playerController.SetControl(false);
                     StartCoroutine(JumpToLedge("IdleToHang", ledgeHit.transform, 0.41f, 0.54f));
+                }
+            }
+
+            if (Input.GetButton("Drop") && !playerController.InAction)
+            {
+                if (envScanner.DropLedgeCheck(out RaycastHit ledgeHit))
+                {
+                    currentPoint = GetNearestClimbPoint(ledgeHit.transform, ledgeHit.point);
+                    playerController.SetControl(false);
+                    StartCoroutine(JumpToLedge("DropToHang", ledgeHit.transform, 0.30f, 0.45f, handOffset: new Vector3(0.25f, 0.2f, -0.2f)));
+
                 }
             }
         }
@@ -138,6 +149,27 @@ public class ClimbController : MonoBehaviour
         //After player perfroms "MountFromHang" animation, it would be best to reset player rotation to avoid any weird animation
         playerController.ResetTargetRotation();
         playerController.SetControl(true);
+    }
+
+    ClimbPoint GetNearestClimbPoint(Transform ledge, Vector3 hitPoint)
+    {
+        var points = ledge.GetComponentsInChildren<ClimbPoint>();        
+        ClimbPoint nearestPoint = null;
+        float nearestPointDistance = Mathf.Infinity;
+
+        foreach (var point in points)
+        {
+            float distance = Vector3.Distance(point.transform.position, hitPoint);
+
+            if (distance < nearestPointDistance)
+            {
+                nearestPoint = point;
+                nearestPointDistance = distance;
+            }
+        }
+
+        return nearestPoint; 
+
     }
 
 }
