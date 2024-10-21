@@ -80,8 +80,7 @@ public class ClimbController : MonoBehaviour
                 if (neigbour.direction.x == 1)
                     StartCoroutine(JumpToLedge("ShimmyRight", currentPoint.transform, 0.0f, 0.38f, handOffset: new Vector3(0.25f, 0.05f, 0.1f)));
                 else if (neigbour.direction.x == -1)
-                    StartCoroutine(JumpToLedge("ShimmyLeft", currentPoint.transform, 0.0f, 0.38f, AvatarTarget.LeftHand));
-                
+                    StartCoroutine(JumpToLedge("ShimmyLeft", currentPoint.transform, 0.0f, 0.38f, AvatarTarget.LeftHand));                
 
             }    
 
@@ -132,7 +131,7 @@ public class ClimbController : MonoBehaviour
         yield return playerController.DoAction("MountFromHang");
 
         //After performing mounting animation, character colider won't go through the obstacles        
-        playerController.EnableCharacterController(true); // Fix the bug character's colider
+        playerController.EnableCharacterController(true); // Fixed the bug character's colider
 
         yield return new WaitForSeconds(0.5f);            
 
