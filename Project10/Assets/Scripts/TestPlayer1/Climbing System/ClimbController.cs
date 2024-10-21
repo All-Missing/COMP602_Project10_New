@@ -23,7 +23,7 @@ public class ClimbController : MonoBehaviour
                 {
                     currentPoint = GetNearestClimbPoint(ledgeHit.transform, ledgeHit.point);
                     playerController.SetControl(false);
-                    StartCoroutine(JumpToLedge("IdleToHang", ledgeHit.transform, 0.41f, 0.54f));
+                    StartCoroutine(JumpToLedge("IdleToHang", currentPoint.transform, 0.41f, 0.54f));
                 }
             }
 
@@ -33,7 +33,7 @@ public class ClimbController : MonoBehaviour
                 {
                     currentPoint = GetNearestClimbPoint(ledgeHit.transform, ledgeHit.point);
                     playerController.SetControl(false);
-                    StartCoroutine(JumpToLedge("DropToHang", ledgeHit.transform, 0.30f, 0.45f, handOffset: new Vector3(0.25f, 0.2f, -0.2f)));
+                    StartCoroutine(JumpToLedge("DropToHang", currentPoint.transform, 0.30f, 0.45f, handOffset: new Vector3(0.25f, 0.2f, -0.2f)));
 
                 }
             }
