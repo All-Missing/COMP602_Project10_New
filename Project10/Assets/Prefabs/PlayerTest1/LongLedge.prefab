@@ -27,7 +27,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1118704816544743726}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0.7099983, z: -0, w: 0.7042035}
+  m_LocalRotation: {x: 0, y: -0.71000105, z: 0, w: 0.7042006}
   m_LocalPosition: {x: -0.504, y: 0.482, z: -0.004}
   m_LocalScale: {x: 1, y: 0.033333335, z: 0.033333335}
   m_ConstrainProportionsScale: 0
@@ -152,11 +152,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a8bdd4d558bee4602871b65c87abf53b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mountPoint: 1
   neighbours:
   - point: {fileID: 0}
-    direction: {x: 0, y: 0}
+    direction: {x: -1, y: 0}
     connectionType: 0
-    isTwoWay: 0
+    isTwoWay: 1
 --- !u!1 &2015605674592272261
 GameObject:
   m_ObjectHideFlags: 0
@@ -201,6 +202,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a8bdd4d558bee4602871b65c87abf53b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mountPoint: 1
   neighbours:
   - point: {fileID: 3062705746325033033}
     direction: {x: -1, y: 0}
@@ -250,6 +252,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a8bdd4d558bee4602871b65c87abf53b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mountPoint: 1
   neighbours:
   - point: {fileID: 5854166822432564225}
     direction: {x: -1, y: 0}
