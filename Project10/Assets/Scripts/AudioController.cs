@@ -7,16 +7,21 @@ public class AudioController : MonoBehaviour
     public Slider musicVolumeSlider;    
     public Slider characterVolumeSlider;
     public Slider uiVolumeSlider;
+    public Slider ambientVolumeSlider;
 
     public Text generalVolumeText;      
     public Text musicVolumeText;        
     public Text characterVolumeText;   
     public Text uiVolumeText;
+    public Text ambientVolumeText;
 
     public AudioSource generalAudioSource;  
     public AudioSource musicAudioSource;    
     public AudioSource characterAudioSource;
     public AudioSource uiAudioSource;
+    public AudioSource ambientAudioSource;
+
+    
 
     void Start()
     {
@@ -25,18 +30,21 @@ public class AudioController : MonoBehaviour
         musicVolumeSlider.value = musicAudioSource.volume;
         characterVolumeSlider.value = characterAudioSource.volume;
         uiVolumeSlider.value = uiAudioSource.volume;
+        ambientVolumeSlider.value = ambientAudioSource.volume;
 
         // Update text with current values
         UpdateGeneralVolume(generalVolumeSlider.value);
         UpdateMusicVolume(musicVolumeSlider.value);
         UpdateCharacterVolume(characterVolumeSlider.value);
         UpdateUiVolume(uiVolumeSlider.value);
+        UpdateAmbientVolume(ambientVolumeSlider.value);
 
         // Add listeners for sliders
         generalVolumeSlider.onValueChanged.AddListener(UpdateGeneralVolume);
         musicVolumeSlider.onValueChanged.AddListener(UpdateMusicVolume);
         characterVolumeSlider.onValueChanged.AddListener(UpdateCharacterVolume);
         uiVolumeSlider.onValueChanged.AddListener(UpdateUiVolume);
+        ambientVolumeSlider.onValueChanged.AddListener(UpdateAmbientVolume);
     }
 
     // General volume slider update
@@ -65,5 +73,13 @@ public class AudioController : MonoBehaviour
     {
         uiAudioSource.volume = value;
         uiVolumeText.text = Mathf.RoundToInt(value * 100).ToString(); // Show value from 0 to 100
+        Debug.Log("UI Volume: " + uiAudioSource.volume); // Log the updated volume
     }
+
+    // General World Audio update
+    public void UpdateAmbientVolume(float value)
+{
+    ambientAudioSource.volume = value;
+    ambientVolumeText.text = Mathf.RoundToInt(value * 100).ToString(); // Show value from 0 to 100
+}
 }
