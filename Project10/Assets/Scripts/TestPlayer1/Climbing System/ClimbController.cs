@@ -130,7 +130,11 @@ public class ClimbController : MonoBehaviour
     {
         playerController.IsHanging = false;
         yield return playerController.DoAction("MountFromHang");
-        yield return new WaitForSeconds(0.5f);
+
+        //After performing mounting animation, character colider won't go through the obstacles        
+        playerController.EnableCharacterController(true); // Fix the bug character's colider
+
+        yield return new WaitForSeconds(0.5f);            
 
         //After player perfroms "MountFromHang" animation, it would be best to reset player rotation to avoid any weird animation
         playerController.ResetTargetRotation();

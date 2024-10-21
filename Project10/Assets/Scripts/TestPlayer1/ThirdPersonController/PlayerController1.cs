@@ -188,6 +188,11 @@ public class PlayerController1 : MonoBehaviour
         }
     }
 
+    public void EnableCharacterController(bool enabled)
+    {
+        characterController.enabled = enabled;
+    }
+
     public void ResetTargetRotation()
     {
         targetRotation = transform.rotation;
