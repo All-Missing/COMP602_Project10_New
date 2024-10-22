@@ -32,7 +32,7 @@ public class GrappleHook : MonoBehaviour
 
     void Update()
     {
-        // Start grappling when 'R' is pressed, if not already grappling
+        // Start grappling when 'Q' is pressed, if not already grappling
         if (Input.GetKeyDown(KeyCode.R) && !isGrappling)
         {
             StartGrapple();
@@ -103,3 +103,4 @@ public class GrappleHook : MonoBehaviour
         Debug.Log("Grapple ended.");
     }
 }
+

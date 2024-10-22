@@ -3,15 +3,15 @@ using UnityEngine;
 using UnityEngine.UI; // Import for Unity's UI components
 using TMPro;
 
-public class ChestInteraction : MonoBehaviour
+public class TimeStopChestInteract : MonoBehaviour
 {
     public GameObject chestInventoryUI; // Reference to the chest inventory UI
-    public GameObject itemIcon; // The item to be shown in the chest (e.g., blue square)
+    public GameObject itemIcon; // The item to be shown in the chest
     public GameObject interactText; // Reference to the interact text
-    public GameObject playerItemHUD; // Reference to the GameObject for the HUD that shows the item when equipped
+    public GameObject playerItemHUD; // Reference to the HUD showing the equipped item
     public Button addCoinsButton; // Reference to the button that adds 20 coins
     public TextMeshProUGUI coinText; // Reference to the TextMeshPro component for displaying coins
-    public float timeSlowFactor = 5f; // Factor by which to slow down time (0.5 = half speed)
+    public float timeSlowFactor = 0.2f; // Factor to slow down time
     public float timeSlowDuration = 5f; // Duration of the time slow effect
 
     private bool isPlayerNear = false;
@@ -25,25 +25,38 @@ public class ChestInteraction : MonoBehaviour
         interactText.SetActive(false); // Hide interact text at the start
         playerItemHUD.SetActive(false); // Hide player HUD at the start
 
-        // Ensure the button is set up and listen for its click
-        addCoinsButton.onClick.AddListener(OnAddCoinsClick);
-        
-        // Initialize the coin text
-        coinText.text = "Coins: 0"; // Ensure initial value is set
+        addCoinsButton.onClick.AddListener(OnAddCoinsClick); // Setup button listener
+        coinText.text = "Coins: 0"; // Initialize the coin display
     }
 
     void Update()
     {
-        // If the player is near and presses "E", toggle the chest UI
+        // If the player is near and presses "E", try to open the chest
         if (isPlayerNear && Input.GetKeyDown(KeyCode.E))
         {
-            ToggleChest();
+            TryOpenChest();
         }
 
-        // Check if the player presses "Q" to activate the time slow
+        // Activate time slow when "Q" is pressed and item is equipped
         if (Input.GetKeyDown(KeyCode.Q) && timeSlowReady && playerItemHUD.activeSelf)
         {
             StartCoroutine(ActivateTimeSlow());
+        }
+    }
+
+    void TryOpenChest()
+    {
+        int currentCoins = GetCurrentCoinCount();
+
+        if (currentCoins >= 20) // Check if the player has enough coins
+        {
+            currentCoins -= 20; // Deduct 20 coins
+            coinText.text = "Coins: " + currentCoins.ToString(); // Update coin display
+            ToggleChest(); // Open the chest UI
+        }
+        else
+        {
+            Debug.Log("Not enough coins to open the chest.");
         }
     }
 
@@ -52,15 +65,7 @@ public class ChestInteraction : MonoBehaviour
         bool isActive = chestInventoryUI.activeSelf;
         chestInventoryUI.SetActive(!isActive); // Toggle the chest UI visibility
 
-        // Hide the interact text when the chest UI is open
-        if (isActive)
-        {
-            interactText.SetActive(false);
-        }
-        else
-        {
-            interactText.SetActive(true);
-        }
+        interactText.SetActive(!isActive); // Toggle interact text visibility
     }
 
     private void OnTriggerEnter(Collider other)
@@ -68,7 +73,7 @@ public class ChestInteraction : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             isPlayerNear = true;
-            interactText.SetActive(true); // Show the interact text
+            interactText.SetActive(true); // Show interact text
 
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
@@ -81,9 +86,8 @@ public class ChestInteraction : MonoBehaviour
         {
             isPlayerNear = false;
             interactText.SetActive(false); // Hide interact text
-            chestInventoryUI.SetActive(false); // Close chest UI if player leaves
+            chestInventoryUI.SetActive(false); // Close the chest UI if open
 
-            // Lock the cursor back to the game
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
         }
@@ -91,51 +95,46 @@ public class ChestInteraction : MonoBehaviour
 
     public void OnItemClick()
     {
-        // Hide the item in the chest and equip it
         itemIcon.SetActive(false); // Hide the item in the chest
-        Debug.Log("Item Equipped!");
+        playerItemHUD.SetActive(true); // Show the equipped item in the HUD
 
-        // Display the item in the player's HUD
-        playerItemHUD.SetActive(true); // Activate the HUD GameObject
+        Debug.Log("Item Equipped!");
     }
 
     public void OnAddCoinsClick()
     {
-        // Attempt to parse the current coin count from coinText
-        int currentCoins = 0; // Initialize currentCoins
+        int currentCoins = GetCurrentCoinCount();
 
-        // Remove the "Coins: " part and trim any whitespace
+        currentCoins += 20; // Add 20 coins
+        coinText.text = "Coins: " + currentCoins.ToString(); // Update coin display
+
+        addCoinsButton.gameObject.SetActive(false); // Disable button after use
+    }
+
+    int GetCurrentCoinCount()
+    {
+        // Parse the current coin count from the coinText
         string coinsText = coinText.text.Replace("Coins: ", "").Trim();
-
-        // Check if the remaining text is a valid integer
-        if (int.TryParse(coinsText, out currentCoins))
+        if (int.TryParse(coinsText, out int currentCoins))
         {
-            currentCoins += 20; // Add 20 coins
-            coinText.text = "Coins: " + currentCoins.ToString(); // Update the displayed coin count
+            return currentCoins;
         }
         else
         {
-            Debug.LogError("Coin text is not in a valid format: " + coinText.text);
-            // Optionally, you could set a default value if parsing fails
-            currentCoins = 0; // Reset to 0 or any default value
-            coinText.text = "Coins: " + currentCoins.ToString(); // Update the displayed coin count
+            Debug.LogError("Invalid coin format: " + coinText.text);
+            return 0; // Default to 0 if parsing fails
         }
-
-        // Disable the button after it's clicked to prevent further use
-        addCoinsButton.gameObject.SetActive(false); // Make the +20 coins button disappear
     }
 
     IEnumerator ActivateTimeSlow()
     {
-        // Slow down the time scale
-        Time.timeScale = timeSlowFactor;
+        Time.timeScale = timeSlowFactor; // Slow time
         timeSlowReady = false;
         Debug.Log("Time Slow Activated!");
 
-        yield return new WaitForSecondsRealtime(timeSlowDuration); // Wait for the duration of the time slow
+        yield return new WaitForSecondsRealtime(timeSlowDuration); // Wait for the duration
 
-        // Reset time scale back to normal
-        Time.timeScale = 1f;
+        Time.timeScale = 1f; // Reset time scale
         Debug.Log("Time Slow Ended!");
 
         yield return new WaitForSeconds(30); // Cooldown duration

@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-public class GrappleChest : MonoBehaviour
+public class ChestInteraction : MonoBehaviour
 {
     public GameObject chestInventoryUI; // Reference to the chest inventory UI
     public GameObject itemIcon; // The item to be shown in the chest
@@ -11,16 +11,11 @@ public class GrappleChest : MonoBehaviour
     public GameObject playerItemHUD; // HUD showing the equipped item
     public Button addCoinsButton; // Button to add coins
     public TextMeshProUGUI coinText; // Coin display text
-    public float timeSlowFactor = 5f; // Factor to slow time
-    public float timeSlowDuration = 5f; // Duration of time slow
 
     private bool isPlayerNear = false; // Tracks if the player is near the chest
-    private bool timeSlowReady = true; // Check if time slow can be activated
 
     // Reference to GrappleHook script to enable its ability
     public GrappleHook grappleHook; 
-
-    private PlayerController1 playerController; // Reference to the player's controller
 
     void Start()
     {
@@ -40,13 +35,23 @@ public class GrappleChest : MonoBehaviour
         // Open chest UI with 'E' when near
         if (isPlayerNear && Input.GetKeyDown(KeyCode.E))
         {
-            ToggleChest();
+            TryOpenChest();
         }
+    }
 
-        // Activate time slow when 'Q' is pressed and item is equipped
-        if (Input.GetKeyDown(KeyCode.Q) && timeSlowReady && playerItemHUD.activeSelf)
+    void TryOpenChest()
+    {
+        int currentCoins = GetCurrentCoinCount(); // Get current coins
+
+        if (currentCoins >= 20) // Check if the player has enough coins
         {
-            StartCoroutine(ActivateTimeSlow());
+            currentCoins -= 20; // Deduct 20 coins
+            coinText.text = "Coins: " + currentCoins.ToString(); // Update coin display
+            ToggleChest(); // Open the chest UI
+        }
+        else
+        {
+            Debug.Log("Not enough coins to open the chest.");
         }
     }
 
@@ -97,39 +102,26 @@ public class GrappleChest : MonoBehaviour
 
     public void OnAddCoinsClick()
     {
-        int currentCoins = 0;
+        int currentCoins = GetCurrentCoinCount(); // Get current coins
 
-        // Parse coin count from text
-        string coinsText = coinText.text.Replace("Coins: ", "").Trim();
-        if (int.TryParse(coinsText, out currentCoins))
-        {
-            currentCoins += 20;
-            coinText.text = "Coins: " + currentCoins.ToString();
-        }
-        else
-        {
-            Debug.LogError("Invalid coin format: " + coinText.text);
-            currentCoins = 0;
-            coinText.text = "Coins: 0";
-        }
+        currentCoins += 20; // Add 20 coins
+        coinText.text = "Coins: " + currentCoins.ToString(); // Update coin display
 
         addCoinsButton.gameObject.SetActive(false); // Hide button after use
     }
 
-    IEnumerator ActivateTimeSlow()
+    int GetCurrentCoinCount()
     {
-        Time.timeScale = timeSlowFactor;
-        timeSlowReady = false;
-        Debug.Log("Time Slow Activated!");
-
-        yield return new WaitForSecondsRealtime(timeSlowDuration);
-
-        Time.timeScale = 1f;
-        Debug.Log("Time Slow Ended!");
-
-        yield return new WaitForSeconds(30); // Cooldown duration
-
-        timeSlowReady = true;
-        Debug.Log("Time Slow Ready Again!");
+        // Parse coin count from text
+        string coinsText = coinText.text.Replace("Coins: ", "").Trim();
+        if (int.TryParse(coinsText, out int currentCoins))
+        {
+            return currentCoins; // Return the current coin count
+        }
+        else
+        {
+            Debug.LogError("Invalid coin format: " + coinText.text);
+            return 0; // Default to 0 if parsing fails
+        }
     }
 }
