@@ -27,10 +27,10 @@ public class AudioController : MonoBehaviour
     {
         // Initialize sliders to current audio source volume
         generalVolumeSlider.value = 1f;
-        musicVolumeSlider.value = musicAudioSource.volume;
-        characterVolumeSlider.value = characterAudioSource.volume;
-        uiVolumeSlider.value = uiAudioSource.volume;
-        ambientVolumeSlider.value = ambientAudioSource.volume;
+        musicVolumeSlider.value = 0.1f;
+        characterVolumeSlider.value = 1f;
+        uiVolumeSlider.value = 1f;
+        ambientVolumeSlider.value = 1f;
 
         UpdateMusicVolume(musicVolumeSlider.value);
         UpdateCharacterVolume(characterVolumeSlider.value);
