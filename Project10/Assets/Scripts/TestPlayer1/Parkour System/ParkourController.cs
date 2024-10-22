@@ -5,11 +5,13 @@ using UnityEngine;
 public class ParkourController : MonoBehaviour
 {
     [SerializeField] List<ParkourAction> parkourActions;
-    bool inAction;
+    [SerializeField] ParkourAction jumpDownAction;
+    [SerializeField] float autoDropHeightLimit = 1;
 
     EnvironmentScanner environmentScanner;
     Animator animator;
     PlayerController1 playerController;
+
     CharacterSoundManager soundManager;
 
     private void Awake()
@@ -22,33 +24,44 @@ public class ParkourController : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetButton("Jump") && !inAction)
-        {
-            var hitData = environmentScanner.ObstacleCheck();
+        var hitData = environmentScanner.ObstacleCheck();
+        if (Input.GetButton("Jump") && !playerController.InAction && !playerController.IsHanging)
+        {            
             if (hitData.forwardHitFound)
             {
                 //For debugging obstacle objects found
                 Debug.Log("Obstacle Found " + hitData.forwardHit.transform.name);
-
                 foreach (var action in parkourActions)
                 {
                     if (action.CheckIfPossible(hitData, transform))
                     {
-
-
                         StartCoroutine(DoParkourAction(action));
-
                         break;
                     }
                 }
-
             }
+        }
+
+        // Check if a character is on ledge of object before perfoming jumping down animation
+        if (playerController.IsOnLedge && !playerController.InAction && !hitData.forwardHitFound)
+        {
+            bool shouldJump = true;
+            if (playerController.LedgeData.height > autoDropHeightLimit && !Input.GetButton("Jump"))
+                shouldJump = false;
+
+            // Double check if a ledge position is too high, then performing jumping down animation
+            if (playerController.LedgeData.angle <= 50)
+            {
+                playerController.IsOnLedge = false;
+                StartCoroutine(DoParkourAction(jumpDownAction));
+            }
+
         }
     }
 
     IEnumerator DoParkourAction(ParkourAction action)
-    {
-        inAction = true;
+    {       
+        playerController.SetControl(false);
 
         if (soundManager != null) // Play vaulting sound
         {
@@ -60,39 +73,22 @@ public class ParkourController : MonoBehaviour
             Debug.Log(soundManager);
         }
 
-        playerController.SetControl(false);
-
-        if (soundManager != null) // Play vaulting sound
-        {
-            soundManager.PlayVaultingSound();
+        MatchTargetParams matchParams =  null;
+        if (action.EnableTargetMatching) {
+            matchParams = new MatchTargetParams()
+            {
+                pos = action.MatchPos,
+                bodyPart = action.MatchBodyPart,
+                posWeight = action.MatchPosWeight,
+                startTime = action.MatchStartTime,
+                targetTime = action.MatchTargetTime
+            };
         }
 
-        animator.CrossFade(action.AnimName, 0.2f);
-        yield return null;
+        yield return playerController.DoAction(action.AnimName, matchParams, action.TargetRotation,
+            action.RotateToObstacle, action.PostActionDelay, action.Mirror);
 
-        var animaState = animator.GetNextAnimatorStateInfo(0);
-        if (!animaState.IsName(action.AnimName))
-            Debug.LogError("The parkour animation is wrong!");
-
-        float timer = 0f;
-        while (timer <= animaState.length)
-        {
-            timer += Time.deltaTime;
-
-            // Rotate the player towards the obstacle
-            if (action.RotateToObstacle)
-                transform.rotation = Quaternion.RotateTowards(transform.rotation, action.TargetRotation, playerController.RotationSpeed * Time.deltaTime);
-
-            if (action.EnableTargetMatching)
-                MatchTarget(action);
-
-            yield return null;
-        }
-
-        yield return new WaitForSeconds(action.PostActionDelay);
-
-        playerController.SetControl(true);
-        inAction = false;
+        playerController.SetControl(true);       
     }
 
     void MatchTarget(ParkourAction action)
