@@ -11,7 +11,7 @@ public class ChestInteraction : MonoBehaviour
     public GameObject playerItemHUD; // Reference to the GameObject for the HUD that shows the item when equipped
     public Button addCoinsButton; // Reference to the button that adds 20 coins
     public TextMeshProUGUI coinText; // Reference to the TextMeshPro component for displaying coins
-    public float timeSlowFactor = 0.5f; // Factor by which to slow down time (0.5 = half speed)
+    public float timeSlowFactor = 5f; // Factor by which to slow down time (0.5 = half speed)
     public float timeSlowDuration = 5f; // Duration of the time slow effect
 
     private bool isPlayerNear = false;

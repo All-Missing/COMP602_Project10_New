@@ -1,139 +1,105 @@
 using System.Collections;
 using UnityEngine;
-using UnityEngine.UI;
-using TMPro;
 
 public class GrappleHook : MonoBehaviour
 {
-    public GameObject chestInventoryUI; // The chest inventory UI
-    public GameObject interactText;     // Text to show when the player is near
-    public GameObject playerItemHUD;    // Grapple HUD that shows when equipped
-    public LineRenderer lineRenderer;   // Line for grapple effect
-    public Transform cameraTransform;   // Player camera
-    public Transform player;            // Player's position
-    public float grappleSpeed = 10f;    // Grapple speed
-    public float maxGrappleDistance = 50f; // Maximum distance for grapple
+    public GameObject player; // Reference to the player
+    public LineRenderer lineRenderer; // Line for grapple effect
+    public float grappleSpeed = 10f; // Speed of movement during grapple
+    public float maxGrappleDistance = 50f; // Maximum grapple distance
+    public Material grappleMaterial; // Material for line renderer
+    public float grappleDuration = 3f; // Duration of grapple (in seconds)
 
-    private bool isPlayerNear = false;
-    private bool isGrappling = false;   // Whether the player is currently grappling
-    private Vector3 grapplePoint;       // Point to grapple to
-    private SpringJoint springJoint;    // Spring effect for pulling player
+    [SerializeField] private float lineStartWidth = 0.1f; // Line start width
+    [SerializeField] private float lineEndWidth = 0.1f; // Line end width
+    [SerializeField] private float lineHeightOffset = 1.0f; // Offset to raise the line
+
+    private Vector3 grapplePoint; // Target point of the grapple
+    private bool isGrappling = false; // Whether grapple is active
+    private CharacterController characterController; // Character controller reference
 
     void Start()
     {
-        chestInventoryUI.SetActive(false);
-        interactText.SetActive(false);
-        playerItemHUD.SetActive(false);  // Start with Grapple HUD hidden
         lineRenderer.positionCount = 2;
         lineRenderer.enabled = false;
+        characterController = player.GetComponent<CharacterController>();
+
+        // Set the material and line widths
+        lineRenderer.material = grappleMaterial;
+        lineRenderer.startWidth = lineStartWidth;
+        lineRenderer.endWidth = lineEndWidth;
     }
 
     void Update()
     {
-        // Toggle the chest UI if the player is near and presses E
-        if (isPlayerNear && Input.GetKeyDown(KeyCode.E))
-        {
-            ToggleChest();
-        }
-
-        // Start grappling if the player presses R and the HUD is active
-        if (Input.GetKeyDown(KeyCode.R) && playerItemHUD.activeSelf && !isGrappling)
+        // Start grappling when 'R' is pressed, if not already grappling
+        if (Input.GetKeyDown(KeyCode.R) && !isGrappling)
         {
             StartGrapple();
         }
 
-        // Update the grapple if in progress
+        // Update the grapple line if the grapple is active
         if (isGrappling)
         {
-            UpdateGrapple();
-        }
-    }
-
-    void ToggleChest()
-    {
-        bool isActive = chestInventoryUI.activeSelf;
-        chestInventoryUI.SetActive(!isActive);
-
-        if (isActive)
-        {
-            interactText.SetActive(false);
-        }
-        else
-        {
-            interactText.SetActive(true);
+            UpdateGrappleLine();
         }
     }
 
     private void StartGrapple()
     {
-        // Raycast from the camera to detect grapple point
         RaycastHit hit;
-        if (Physics.Raycast(cameraTransform.position, cameraTransform.forward, out hit, maxGrappleDistance))
+        // Perform a raycast to find a grapple point in front of the player
+        if (Physics.Raycast(player.transform.position, player.transform.forward, out hit, maxGrappleDistance))
         {
             grapplePoint = hit.point;
             isGrappling = true;
             lineRenderer.enabled = true;
-            lineRenderer.SetPosition(0, player.position);
-            lineRenderer.SetPosition(1, grapplePoint);
 
-            springJoint = player.gameObject.AddComponent<SpringJoint>();
-            springJoint.autoConfigureConnectedAnchor = false;
-            springJoint.connectedAnchor = grapplePoint;
-            springJoint.spring = 10f;
-            springJoint.damper = 5f;
-            springJoint.maxDistance = Vector3.Distance(player.position, grapplePoint) * 0.8f;
-            springJoint.minDistance = 0.1f;
+            // Set the initial line positions with the height offset applied
+            lineRenderer.SetPosition(0, player.transform.position + Vector3.up * lineHeightOffset);
+            lineRenderer.SetPosition(1, grapplePoint + Vector3.up * lineHeightOffset);
+
+            // Start the grapple movement and duration coroutine
+            StartCoroutine(GrappleMovement(grappleDuration));
+        }
+        else
+        {
+            Debug.Log("No valid grapple point found.");
         }
     }
 
-    private void UpdateGrapple()
+    private void UpdateGrappleLine()
     {
-        // Update line renderer
-        lineRenderer.SetPosition(0, player.position);
-        lineRenderer.SetPosition(1, grapplePoint);
+        // Continuously update the line with the height offset applied
+        lineRenderer.SetPosition(0, player.transform.position + Vector3.up * lineHeightOffset);
+        lineRenderer.SetPosition(1, grapplePoint + Vector3.up * lineHeightOffset);
+    }
 
-        // Stop grappling when close enough to the target
-        if (Vector3.Distance(player.position, grapplePoint) < 2f)
+    private IEnumerator GrappleMovement(float duration)
+    {
+        float elapsedTime = 0f;
+
+        // Move the player toward the grapple point for the specified duration
+        while (elapsedTime < duration)
         {
-            StopGrapple();
+            Vector3 direction = (grapplePoint - player.transform.position).normalized;
+            characterController.Move(direction * grappleSpeed * Time.deltaTime);
+
+            elapsedTime += Time.deltaTime;
+            yield return null; // Wait for the next frame
         }
+
+        StopGrapple(); // Stop the grapple after the duration ends
     }
 
     private void StopGrapple()
     {
         isGrappling = false;
         lineRenderer.enabled = false;
-        Destroy(springJoint);
-    }
 
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.CompareTag("Player"))
-        {
-            isPlayerNear = true;
-            interactText.SetActive(true);
-            Cursor.lockState = CursorLockMode.None;
-            Cursor.visible = true;
-        }
-    }
+        // Optionally, reset player velocity or state here if needed
+        characterController.Move(Vector3.zero); // Ensure no lingering movement
 
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.CompareTag("Player"))
-        {
-            isPlayerNear = false;
-            interactText.SetActive(false);
-            chestInventoryUI.SetActive(false);
-            Cursor.lockState = CursorLockMode.Locked;
-            Cursor.visible = false;
-        }
-    }
-
-    public void OnGrappleItemClick()
-    {
-        Debug.Log("Grapple Hook Equipped!");
-
-        // Display the grapple HUD
-        playerItemHUD.SetActive(true); // Show Grapple HUD when equipped
+        Debug.Log("Grapple ended.");
     }
 }
