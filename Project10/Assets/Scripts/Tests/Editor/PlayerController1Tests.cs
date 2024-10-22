@@ -204,19 +204,72 @@ public class PlayerController1Tests
             .GetField("hasControl", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
             .SetValue(playerController, true);
 
-        // Act: Call Update (this will trigger the rotation logic based on move direction)
         playerController.GetType()
-            .GetMethod("GroundCheck", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
+            .GetField("isGrounded", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
+            .SetValue(playerController, true);
+
+        // Ensure the camera controller is attached
+        var cameraController = Camera.main.GetComponent<CameraController>();
+        if (cameraController == null)
+        {
+            cameraController = Camera.main.gameObject.AddComponent<CameraController>();
+        }
+        playerController.GetType()
+            .GetField("cameraController", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
+            .SetValue(playerController, cameraController);
+
+        // Retrieve existing CharacterController if it already exists
+        var characterController = playerObject.GetComponent<CharacterController>();
+        if (characterController == null)
+        {
+            characterController = playerObject.AddComponent<CharacterController>();
+        }
+
+        // Retrieve existing Animator if it already exists
+        var animator = playerObject.GetComponent<Animator>();
+        if (animator == null)
+        {
+            animator = playerObject.AddComponent<Animator>();
+        }
+
+        // Retrieve existing EnvironmentScanner if it already exists
+        var environmentScanner = playerObject.GetComponent<EnvironmentScanner>();
+        if (environmentScanner == null)
+        {
+            environmentScanner = playerObject.AddComponent<EnvironmentScanner>();
+        }
+
+        // Use reflection to set these components to private fields in PlayerController1
+        playerController.GetType()
+            .GetField("characterController", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
+            .SetValue(playerController, characterController);
+
+        playerController.GetType()
+            .GetField("animator", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
+            .SetValue(playerController, animator);
+
+        playerController.GetType()
+            .GetField("environmentScanner", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
+            .SetValue(playerController, environmentScanner);
+
+        // Act: Call Update method, which should handle rotation logic
+        playerController.GetType()
+            .GetMethod("Update", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
             .Invoke(playerController, null);
 
-        // Retrieve the targetRotation after the update
-        Quaternion targetRotation = (Quaternion)playerController.GetType()
-            .GetField("targetRotation", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
-            .GetValue(playerController);
+        // Retrieve the player's actual rotation (transform.rotation)
+        Quaternion actualRotation = playerController.transform.rotation;
 
-        // Assert: Ensure the player rotates towards the right (matching the move direction)
-        Assert.AreEqual(Quaternion.LookRotation(moveDirection), targetRotation, "Player should rotate towards the move direction.");
+        // Log the values for debugging
+        Debug.Log($"Expected Rotation: {Quaternion.LookRotation(moveDirection)}");
+        Debug.Log($"Actual Player Rotation: {actualRotation}");
+
+        // Assert: Ensure the player's transform rotation matches the movement direction
+        Assert.AreEqual(Quaternion.LookRotation(moveDirection), actualRotation, "Player should rotate towards the move direction.");
     }
+
+
+
 
 
     [Test]
