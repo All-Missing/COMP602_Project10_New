@@ -211,6 +211,18 @@ public class PlayerController1 : MonoBehaviour
     }
 
     public float RotationSpeed => rotationSpeed;
+
+    
+
+    public void SetTimeScale(float newTimeScale)
+    {
+        Time.timeScale = newTimeScale;
+    }
+
+    public void ResetTimeScale()
+    {
+        Time.timeScale = 1f; // Reset to normal time scale
+    }
 }
 
 
