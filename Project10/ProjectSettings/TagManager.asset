@@ -8,8 +8,7 @@ TagManager:
   - Fence
   - pillar
   - Terrain
-  - Coin
-  - Chest
+  - Start
   layers:
   - Default
   - TransparentFX
