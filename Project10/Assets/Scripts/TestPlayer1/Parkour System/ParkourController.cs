@@ -10,12 +10,14 @@ public class ParkourController : MonoBehaviour
     EnvironmentScanner environmentScanner;
     Animator animator;
     PlayerController1 playerController;
+    CharacterSoundManager soundManager;
 
     private void Awake()
     {
         environmentScanner = GetComponent<EnvironmentScanner>();
         animator = GetComponent<Animator>();
         playerController = GetComponent<PlayerController1>();
+        soundManager = FindObjectOfType<CharacterSoundManager>();
     }
 
     private void Update()
@@ -27,11 +29,15 @@ public class ParkourController : MonoBehaviour
             {
                 //For debugging obstacle objects found
                 Debug.Log("Obstacle Found " + hitData.forwardHit.transform.name);
+
                 foreach (var action in parkourActions)
                 {
                     if (action.CheckIfPossible(hitData, transform))
                     {
+
+
                         StartCoroutine(DoParkourAction(action));
+
                         break;
                     }
                 }
@@ -43,14 +49,30 @@ public class ParkourController : MonoBehaviour
     IEnumerator DoParkourAction(ParkourAction action)
     {
         inAction = true;
+
+        if (soundManager != null) // Play vaulting sound
+        {
+            soundManager.PlayVaultingSound();
+            Debug.Log("Playing Vault Sound");
+        }
+        else
+        {
+            Debug.Log(soundManager);
+        }
+
         playerController.SetControl(false);
+
+        if (soundManager != null) // Play vaulting sound
+        {
+            soundManager.PlayVaultingSound();
+        }
 
         animator.CrossFade(action.AnimName, 0.2f);
         yield return null;
 
         var animaState = animator.GetNextAnimatorStateInfo(0);
         if (!animaState.IsName(action.AnimName))
-            Debug.LogError("The parkour animation is wrong!"); 
+            Debug.LogError("The parkour animation is wrong!");
 
         float timer = 0f;
         while (timer <= animaState.length)
@@ -60,7 +82,7 @@ public class ParkourController : MonoBehaviour
             // Rotate the player towards the obstacle
             if (action.RotateToObstacle)
                 transform.rotation = Quaternion.RotateTowards(transform.rotation, action.TargetRotation, playerController.RotationSpeed * Time.deltaTime);
-            
+
             if (action.EnableTargetMatching)
                 MatchTarget(action);
 
@@ -70,7 +92,7 @@ public class ParkourController : MonoBehaviour
         yield return new WaitForSeconds(action.PostActionDelay);
 
         playerController.SetControl(true);
-        inAction = false;    
+        inAction = false;
     }
 
     void MatchTarget(ParkourAction action)

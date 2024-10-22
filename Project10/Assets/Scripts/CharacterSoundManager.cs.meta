@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 5fdf85a459e82614c94532f7452ae6e8
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - footstepAudioSource: {instanceID: 0}
+  - footstepClip: {instanceID: 0}
+  - vaultingAudioSource: {instanceID: 0}
+  - vaultingClip: {instanceID: 0}
+  - controller: {instanceID: 0}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
