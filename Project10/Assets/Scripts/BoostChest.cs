@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-public class ChestInteraction : MonoBehaviour
+public class BoostChest : MonoBehaviour
 {
     public GameObject chestInventoryUI; // Reference to the chest inventory UI
     public GameObject itemIcon; // The item to be shown in the chest
@@ -11,12 +11,9 @@ public class ChestInteraction : MonoBehaviour
     public GameObject playerItemHUD; // HUD showing the equipped item
     public Button addCoinsButton; // Button to add coins
     public TextMeshProUGUI coinText; // Coin display text
+    public SpeedBoost speedBoost; // Reference to the SpeedBoost script
 
     private bool isPlayerNear = false; // Tracks if the player is near the chest
-    private bool itemEquipped = false; // Tracks if the item has been equipped
-
-    // Reference to GrappleHook script to enable its ability
-    public GrappleHook grappleHook; 
 
     void Start()
     {
@@ -37,14 +34,6 @@ public class ChestInteraction : MonoBehaviour
         if (isPlayerNear && Input.GetKeyDown(KeyCode.E))
         {
             TryOpenChest();
-        }
-
-        // Check if the player has clicked the item icon
-        if (itemEquipped && Input.GetMouseButtonDown(0)) // Assuming left mouse button is used for clicking
-        {
-            // Activate the grapple hook only after item has been equipped
-            grappleHook.enabled = true;
-            Debug.Log("Grapple Hook Activated!");
         }
     }
 
@@ -103,8 +92,7 @@ public class ChestInteraction : MonoBehaviour
         itemIcon.SetActive(false); // Hide item in the chest
         playerItemHUD.SetActive(true); // Activate the HUD
 
-        Debug.Log("Item Equipped! Grapple Hook Unlocked.");
-        itemEquipped = true; // Mark item as equipped
+        Debug.Log("Item Equipped! Speed Boost Unlocked.");
     }
 
     public void OnAddCoinsClick()
