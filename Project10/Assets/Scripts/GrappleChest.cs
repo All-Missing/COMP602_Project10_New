@@ -13,6 +13,7 @@ public class ChestInteraction : MonoBehaviour
     public TextMeshProUGUI coinText; // Coin display text
 
     private bool isPlayerNear = false; // Tracks if the player is near the chest
+    private bool itemEquipped = false; // Tracks if the item has been equipped
 
     // Reference to GrappleHook script to enable its ability
     public GrappleHook grappleHook; 
@@ -36,6 +37,14 @@ public class ChestInteraction : MonoBehaviour
         if (isPlayerNear && Input.GetKeyDown(KeyCode.E))
         {
             TryOpenChest();
+        }
+
+        // Check if the player has clicked the item icon
+        if (itemEquipped && Input.GetMouseButtonDown(0)) // Assuming left mouse button is used for clicking
+        {
+            // Activate the grapple hook only after item has been equipped
+            grappleHook.enabled = true;
+            Debug.Log("Grapple Hook Activated!");
         }
     }
 
@@ -95,9 +104,7 @@ public class ChestInteraction : MonoBehaviour
         playerItemHUD.SetActive(true); // Activate the HUD
 
         Debug.Log("Item Equipped! Grapple Hook Unlocked.");
-
-        // Enable the grapple hook ability
-        grappleHook.enabled = true; // Activates the grapple hook script
+        itemEquipped = true; // Mark item as equipped
     }
 
     public void OnAddCoinsClick()
