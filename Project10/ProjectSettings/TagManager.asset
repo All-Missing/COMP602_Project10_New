@@ -8,6 +8,7 @@ TagManager:
   - Fence
   - pillar
   - Terrain
+  - Start
   layers:
   - Default
   - TransparentFX
