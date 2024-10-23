@@ -3,7 +3,7 @@ using UnityEngine.SceneManagement;  // This allows us to load scenes
 
 public class TreeTeleport : MonoBehaviour
 {
-    public string sceneToLoad = "Level3";  // Assign the name of the next scene
+    public string sceneToLoad = "Level 3";  // Assign the name of the next scene
 
     private void OnTriggerEnter(Collider other)
     {
