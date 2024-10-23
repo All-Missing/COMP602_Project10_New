@@ -32,6 +32,8 @@ public class CameraController : MonoBehaviour
 
     void Update()
     {
+        if(PauseMenu.GameIsPaused) return;
+        
         invertXValue = (invertX) ? -1 : 1;
         invertYValue = (invertY) ? -1 : 1;
 
