@@ -6,7 +6,13 @@ public class AmbientSoundManager : MonoBehaviour
 
     void Start()
     {
-        // Play the ambient sound when the game starts
+        // Call the new method to handle the sound logic
+        PlayAmbientSound();
+    }
+
+    // New method that handles playing the ambient sound
+    public void PlayAmbientSound()
+    {
         if (ambientAudioSource != null)
         {
             ambientAudioSource.Play();

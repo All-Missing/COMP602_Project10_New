@@ -66,7 +66,7 @@ public class PauseMenu : MonoBehaviour
         GameIsPaused = false;
     }
 
-    void Pause() // Enables the Pause Menu, stops the game and unlocks cursor
+    public  void Pause() // Enables the Pause Menu, stops the game and unlocks cursor
     {
         SetPauseUIActive();
         Time.timeScale = 0f;  // Pauses the game
