@@ -11,12 +11,14 @@ public class ParkourController : MonoBehaviour
     EnvironmentScanner environmentScanner;
     Animator animator;
     PlayerController1 playerController;
+    CharacterSoundManager soundManager;
 
     private void Awake()
     {
         environmentScanner = GetComponent<EnvironmentScanner>();
         animator = GetComponent<Animator>();
         playerController = GetComponent<PlayerController1>();
+        soundManager = FindObjectOfType<CharacterSoundManager>();
     }
 
     private void Update()
@@ -59,6 +61,16 @@ public class ParkourController : MonoBehaviour
     IEnumerator DoParkourAction(ParkourAction action)
     {       
         playerController.SetControl(false);
+
+        if (soundManager != null) // Play vaulting sound
+        {
+            soundManager.PlayVaultingSound();
+            Debug.Log("Playing Vault Sound");
+        }
+        else
+        {
+            Debug.Log(soundManager);
+        }
 
         MatchTargetParams matchParams =  null;
         if (action.EnableTargetMatching) {
