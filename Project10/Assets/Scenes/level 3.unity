@@ -42463,6 +42463,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   musicSource: {fileID: 2093002547}
   musicClips:
+  - {fileID: 8300000, guid: d30f9927312aefb43a9ac14de154ccf5, type: 3}
   - {fileID: 8300000, guid: 37d415e225481804bbf788ce3ef1ea60, type: 3}
   - {fileID: 8300000, guid: 0f8e4a72ab977dc47bdf849748873938, type: 3}
   - {fileID: 8300000, guid: 1c08385c3e10ec04aad5df7ed33b38d1, type: 3}
