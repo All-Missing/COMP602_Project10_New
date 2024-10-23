@@ -30,6 +30,9 @@ public class GameTimer : MonoBehaviour
     public void StartGame()
     {
         isGameStarted = true;
+        Time.timeScale = 1f;  // Ensure normal time scale
+        Cursor.lockState = CursorLockMode.Locked;  // Lock the cursor
+        Cursor.visible = false;  // Hide the cursor during gameplay
     }
 
     private void UpdateTimerText()
@@ -42,7 +45,13 @@ public class GameTimer : MonoBehaviour
     public void EndGame()  // Call this when the player touches the object
     {
         isGameStarted = false;  // Stop the timer
+        Time.timeScale = 0f;  // Pause the game
+        Cursor.lockState = CursorLockMode.None;  // Unlock the cursor
+        Cursor.visible = true;  // Make the cursor visible
         endGameOverlay.SetActive(true);  // Show the congratulations overlay
-        endGameMessage.text = "Congratulations!";  // Update the message
+        endGameMessage.text = "Congratulations";
+        
+        FindObjectOfType<PlayerMovement>().enabled = false;
+        FindObjectOfType<CameraController>().enabled = false;
     }
 }
