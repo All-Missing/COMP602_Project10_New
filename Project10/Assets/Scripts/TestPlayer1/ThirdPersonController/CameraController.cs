@@ -32,8 +32,9 @@ public class CameraController : MonoBehaviour
 
     void Update()
     {
-        if(PauseMenu.GameIsPaused) return;
-        
+        // Check if menu is active   
+        if (PauseMenu.GameIsPaused) return;
+        Debug.Log("UpdatingCamera");
         invertXValue = (invertX) ? -1 : 1;
         invertYValue = (invertY) ? -1 : 1;
 
